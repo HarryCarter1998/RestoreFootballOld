@@ -1,0 +1,36 @@
+﻿.subtleLink {
+    color: #595959;
+    text-decoration: underline;
+}
+
+    .subtleLink:hover {
+        cursor: pointer;
+    }
+
+.newPlayerInput {
+    display: none;
+    box-sizing: border-box;
+    background-position: 14px 12px;
+    background-repeat: no-repeat;
+    font-size: 24px;
+    padding: 10px 20px 10px 20px;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    position: relative;
+}
+
+.showBlock {
+    display: block;
+}
+
+.showInlineBlock {
+    display: inline-block;
+}
+
+.hide{
+    display: none;
+}
+
+#success{
+    color: green;
+}

@@ -1,0 +1,69 @@
+﻿@{
+    ViewData["Title"] = "Home page";
+}
+<link href="~/css/site.css" rel="stylesheet" />
+<link href="~/css/dropdown.css" rel="stylesheet" />
+<link href="~/css/form.css" rel="stylesheet" />
+<script src="~/js/dropdown.js"></script>
+<script src="~/js/form.js"></script>
+
+<div class="text-center">
+    <h1 class="display-4">Restore Football</h1>
+
+    <p id="enter-name">Enter your name below to sign up for Wednesday</p>
+    <p id="success" class="hide">Successfully signed up for Wednesday</p>
+    <p id="add-another" class="hide subtleLink" onclick="resetForm()">Add another?</p>
+
+    <div class="dropdown" id="dropdown">
+        <input type="text" placeholder="Search.." id="playerSearch" onkeyup="filterFunction()">
+        <div id="dropdown-content" class="dropdown-content">
+            <p class="dropdown-element" value="1" onclick="addExistingPlayer(this)">Harry</p>
+            <p class="dropdown-element" value="2" onclick="addExistingPlayer(this)">Hermione</p>
+            <p class="dropdown-element" value="3" onclick="addExistingPlayer(this)">Ron</p>
+            <p class="dropdown-element" value="4" onclick="addExistingPlayer(this)">Draco</p>
+            <p class="dropdown-element" value="5" onclick="addExistingPlayer(this)">Ginny</p>
+            <p class="dropdown-element" value="6" onclick="addExistingPlayer(this)">Fred</p>
+        </div>
+    </div>
+
+    <p id="cant-see-name" class="subtleLink" onclick="switchForm()">Can't see your name? </p>
+
+    <input class="newPlayerInput" type="text" placeholder="First Name" id="firstName">
+    <input class="newPlayerInput" type="text" placeholder="Last Name" id="lastName">
+    <button id="add-button" class="addButton" onclick="addNewPlayer()">Add</button>
+
+    <h1 class="display-4">Teams as things stand</h1>
+    <div class="row">
+        <div class="col-sm-3">
+            <h3>Yellows</h3>
+            <p>Player 1</p>
+            <p>Player 2</p>
+            <p>Player 3</p>
+            <p>Player 4</p>
+            <p>Player 5</p>
+        </div>
+        <div class="col-sm-3">
+            <h3>Greens</h3>
+            <p>Player 1</p>
+            <p>Player 2</p>
+            <p>Player 3</p>
+            <p>Player 4</p>
+        </div>
+        <div class="col-sm-3">
+            <h3>Oranges</h3>
+            <p>Player 1</p>
+            <p>Player 2</p>
+            <p>Player 3</p>
+            <p>Player 4</p>
+            <p>Player 5</p>
+        </div>
+        <div class="col-sm-3">
+            <h3>Non-Bibs</h3>
+            <p>Player 1</p>
+            <p>Player 2</p>
+            <p>Player 3</p>
+            <p>Player 4</p>
+            <p>Player 5</p>
+        </div>
+    </div>
+</div>
