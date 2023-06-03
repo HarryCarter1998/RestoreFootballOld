@@ -25,3 +25,17 @@ body {
     display: inline-block;
 }
 
+/* make each h3 header from home index.cshtml the color that it represents*/
+
+#orange {
+    color: orange;
+}
+
+#yellow {
+    color: yellow;
+}
+
+#green {
+    color: green;
+}
+
