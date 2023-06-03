@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'restoreccfootball'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4716926F17984F8DBCB5250085652312 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_44CCF625A3BF4AA3B89AB18E8369B533 }}
           package: .
