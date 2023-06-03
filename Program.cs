@@ -1,4 +1,9 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using RestoreFootball.Data;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<RestoreFootballContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("RestoreFootballContext") ?? throw new InvalidOperationException("Connection string 'RestoreFootballContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
