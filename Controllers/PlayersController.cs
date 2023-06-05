@@ -6,42 +6,31 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RestoreFootball.Data;
+using RestoreFootball.Data.Services;
 using RestoreFootball.Models;
 
 namespace RestoreFootball.Controllers
 {
     public class PlayersController : Controller
     {
-        private readonly RestoreFootballContext _context;
+        private readonly IPlayerService _playerService;
 
-        public PlayersController(RestoreFootballContext context)
+        public PlayersController(IPlayerService playerService)
         {
-            _context = context;
+            _playerService = playerService;
         }
 
         // GET: Player
         public async Task<IActionResult> Index()
         {
-              return _context.Player != null ? 
-                          View(await _context.Player.ToListAsync()) :
-                          Problem("Entity set 'RestoreFootballContext.Player'  is null.");
+            var players = await _playerService.Index();
+            return View(players);
         }
 
         // GET: Player/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null || _context.Player == null)
-            {
-                return NotFound();
-            }
-
-            var player = await _context.Player
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (player == null)
-            {
-                return NotFound();
-            }
-
+            var player = await _playerService.Details(id);
             return View(player);
         }
 
@@ -60,26 +49,23 @@ namespace RestoreFootball.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(player);
-                await _context.SaveChangesAsync();
+                await _playerService.Create(player);
                 return RedirectToAction(nameof(Index));
             }
             return View(player);
         }
 
-        // GET: Player/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public void Create(string firstName)
         {
-            if (id == null || _context.Player == null)
-            {
-                return NotFound();
-            }
+            Console.WriteLine(firstName);
+        }
 
-            var player = await _context.Player.FindAsync(id);
-            if (player == null)
-            {
-                return NotFound();
-            }
+        // GET: Player/Edit/5
+        public async Task<IActionResult> Edit(int id)
+        {
+            var player = await _playerService.Edit(id);
+            if (player is null) return NotFound();
+
             return View(player);
         }
 
@@ -99,19 +85,16 @@ namespace RestoreFootball.Controllers
             {
                 try
                 {
-                    _context.Update(player);
-                    await _context.SaveChangesAsync();
+                    await _playerService.Edit(id, player);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PlayerExists(player.Id))
+                    if (!_playerService.PlayerExists(player.Id))
                     {
                         return NotFound();
                     }
                     else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -119,19 +102,10 @@ namespace RestoreFootball.Controllers
         }
 
         // GET: Player/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null || _context.Player == null)
-            {
-                return NotFound();
-            }
-
-            var player = await _context.Player
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (player == null)
-            {
-                return NotFound();
-            }
+            var player = await _playerService.Delete(id);
+            if (player is null) return NotFound();
 
             return View(player);
         }
@@ -141,23 +115,8 @@ namespace RestoreFootball.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Player == null)
-            {
-                return Problem("Entity set 'RestoreFootballContext.Player'  is null.");
-            }
-            var player = await _context.Player.FindAsync(id);
-            if (player != null)
-            {
-                _context.Player.Remove(player);
-            }
-            
-            await _context.SaveChangesAsync();
+            await _playerService.DeleteConfirmed(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool PlayerExists(int id)
-        {
-          return (_context.Player?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
