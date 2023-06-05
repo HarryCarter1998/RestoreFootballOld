@@ -52,7 +52,7 @@
         <div id="yellow" class="col-sm-3">
             <h3>Yellows</h3>
             @{
-                    foreach (var player in ViewBag.players as List<Player>)
+                foreach (var player in ViewBag.players)
                     {
                         <p>@player.FirstName @player.LastName</p>
                     }
