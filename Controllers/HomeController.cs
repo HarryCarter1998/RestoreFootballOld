@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RestoreFootball.Controllers;
+using RestoreFootball.Models;
 using RestoreFootball2.Models;
 using System.Diagnostics;
 
@@ -15,6 +17,14 @@ namespace RestoreFootball2.Controllers
 
         public IActionResult Index()
         {
+            //make a viewbag to hold a list of players
+            //make a new empty list of players
+            List<Player> players = new List<Player>();
+
+            ViewBag.players = players;
+
+            //make a viewdata to hold a list of players
+            ViewData["Players"] = players;
             return View();
         }
 

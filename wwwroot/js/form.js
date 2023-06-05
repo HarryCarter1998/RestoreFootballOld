@@ -1,7 +1,46 @@
-﻿function addNewPlayer(firstName, lastName) {
+﻿function addNewPlayer() {
+    var firstName = document.getElementById("firstName").value;
+    var lastName = document.getElementById("lastName").value;
+
+    //var player = { FirstName: firstName, LastName: lastName };
+
+    //let myform = document.createElement("form");
+    //myform.action = "example.php";
+    //myform.method = "post";
+
+    //let input1 = document.createElement("input");
+    //input1.type = "text";
+    //input1.name = "FirstName";
+    //input1.value = "Johnathan";
+
+    //let input2 = document.createElement("input");
+    //input2.type = "text";
+    //input2.name = "LastName";
+    //input2.value = "Luxembourg";
+
+    //myform.appendChild(input1);
+    //myform.appendChild(input2);
+
+    //document.body.appendChild(myform);
+
+    //let fd = new FormData(myform);
+    //$.ajax({
+    //    url: "Players/Create",
+    //    data: fd,
+    //    cache: false,
+    //    processData: false,
+    //    contentType: false,
+    //    type: 'POST',
+    //    success: function (response) {
+    //        // do something with the result
+    //    }
+    //});
+
+
     toggleNewPlayerFormVisibility();
     toggleIntro();
 }
+
 
 function addExistingPlayer(playerId) {
     var dropdownContent = document.getElementById("dropdown-content");

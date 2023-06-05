@@ -1,4 +1,6 @@
-﻿@{
+﻿@using RestoreFootball.Models;
+@model RestoreFootball.Models.Player
+@{
     ViewData["Title"] = "Home page";
 }
 <link href="~/css/site.css" rel="stylesheet" />
@@ -28,19 +30,33 @@
 
     <p id="cant-see-name" class="subtleLink" onclick="switchForm()">Can't see your name? </p>
 
-    <input class="newPlayerInput" type="text" placeholder="First Name" id="firstName">
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        
+            <input asp-for="FirstName" class="newPlayerInput" placeholder="First Name" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        
+            <input asp-for="LastName" class="newPlayerInput" placeholder="Last Name" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+       
+            <input type="submit" value="Add" class="addButton" id="add-button" />
+        
+    </form>
+
+@*    <input class="newPlayerInput" type="text" placeholder="First Name" id="firstName">
     <input class="newPlayerInput" type="text" placeholder="Last Name" id="lastName">
-    <button id="add-button" class="addButton" onclick="addNewPlayer()">Add</button>
+    <button id="add-button" class="addButton" onclick="addNewPlayer()">Add</button>*@
 
     <h1 class="display-4">Teams as things stand</h1>
     <div class="row">
         <div id="yellow" class="col-sm-3">
             <h3>Yellows</h3>
-            <p>Player 1</p>
-            <p>Player 2</p>
-            <p>Player 3</p>
-            <p>Player 4</p>
-            <p>Player 5</p>
+            @{
+                    foreach (var player in ViewBag.players as List<Player>)
+                    {
+                        <p>@player.FirstName @player.LastName</p>
+                    }
+            }
         </div>
         <div id="green" class="col-sm-3">
             <h3>Greens</h3>
