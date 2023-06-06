@@ -19,40 +19,27 @@
     <div class="dropdown" id="dropdown">
         <input type="text" placeholder="Search.." id="playerSearch" onkeyup="filterFunction()">
         <div id="dropdown-content" class="dropdown-content">
-            <p class="dropdown-element" value="1" onclick="addExistingPlayer(this)">Harry</p>
-            <p class="dropdown-element" value="2" onclick="addExistingPlayer(this)">Hermione</p>
-            <p class="dropdown-element" value="3" onclick="addExistingPlayer(this)">Ron</p>
-            <p class="dropdown-element" value="4" onclick="addExistingPlayer(this)">Draco</p>
-            <p class="dropdown-element" value="5" onclick="addExistingPlayer(this)">Ginny</p>
-            <p class="dropdown-element" value="6" onclick="addExistingPlayer(this)">Fred</p>
+            @{
+                foreach (var player in ViewBag.Players)
+                {
+                    <p class="dropdown-element" value=@player.Id onclick="addExistingPlayer(this)">@player.FirstName @player.LastName</p>
+                }
+            }
         </div>
     </div>
 
     <p id="cant-see-name" class="subtleLink" onclick="switchForm()">Can't see your name? </p>
 
-    <form asp-action="Create">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        
-            <input asp-for="FirstName" class="newPlayerInput" placeholder="First Name" />
-            <span asp-validation-for="FirstName" class="text-danger"></span>
-        
-            <input asp-for="LastName" class="newPlayerInput" placeholder="Last Name" />
-            <span asp-validation-for="LastName" class="text-danger"></span>
-       
-            <input type="submit" value="Add" class="addButton" id="add-button" />
-        
-    </form>
-
-@*    <input class="newPlayerInput" type="text" placeholder="First Name" id="firstName">
-    <input class="newPlayerInput" type="text" placeholder="Last Name" id="lastName">
-    <button id="add-button" class="addButton" onclick="addNewPlayer()">Add</button>*@
+    <input name="FirstName" class="newPlayerInput" type="text" placeholder="First Name" id="firstName">
+    <input name="LastName" class="newPlayerInput" type="text" placeholder="Last Name" id="lastName">
+    <input value="Add" id="add-button" class="addButton" onclick="addNewPlayer()">
 
     <h1 class="display-4">Teams as things stand</h1>
     <div class="row">
         <div id="yellow" class="col-sm-3">
             <h3>Yellows</h3>
             @{
-                foreach (var player in ViewBag.players)
+                foreach (var player in ViewBag.Players)
                     {
                         <p>@player.FirstName @player.LastName</p>
                     }

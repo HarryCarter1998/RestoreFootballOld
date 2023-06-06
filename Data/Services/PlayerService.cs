@@ -38,17 +38,10 @@ namespace RestoreFootball.Data.Services
             return await _context.Player.FindAsync(id);
         }
 
-        public async Task Edit(int id, Player player)
+        public async Task Edit(Player player)
         {
-            try
-            {
-                _context.Update(player);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
+            _context.Update(player);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<Player?> Delete(int id)
@@ -74,11 +67,6 @@ namespace RestoreFootball.Data.Services
         }
 
         public void AddNewPlayer(Player player)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RegisterPlayer(string FirstName, string LastName, int Rating)
         {
             throw new NotImplementedException();
         }

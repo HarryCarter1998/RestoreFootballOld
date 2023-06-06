@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RestoreFootball.Controllers;
+using RestoreFootball.Data.Services;
 using RestoreFootball.Models;
 using RestoreFootball2.Models;
 using System.Diagnostics;
@@ -9,22 +10,17 @@ namespace RestoreFootball2.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IPlayerService _playerService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IPlayerService playerService)
         {
             _logger = logger;
+            _playerService = playerService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            //make a viewbag to hold a list of players
-            //make a new empty list of players
-            List<Player> players = new List<Player>();
-
-            ViewBag.players = players;
-
-            //make a viewdata to hold a list of players
-            ViewData["Players"] = players;
+            ViewBag.Players = await _playerService.Index();
             return View();
         }
 

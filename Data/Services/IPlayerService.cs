@@ -13,7 +13,7 @@ namespace RestoreFootball.Data.Services
 
         Task<Player?> Edit(int id);
 
-        Task Edit(int id, Player player);
+        Task Edit(Player player);
 
         Task<Player?> Delete(int id);
 
@@ -24,7 +24,5 @@ namespace RestoreFootball.Data.Services
         void AddExistingPlayer(Player player);
 
         void AddNewPlayer(Player player);
-
-        void RegisterPlayer(string FirstName, string LastName, int Rating);
     }
 }

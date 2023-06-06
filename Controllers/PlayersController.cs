@@ -44,20 +44,13 @@ namespace RestoreFootball.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName")] Player player)
+        public async Task Create([Bind("FirstName,LastName,SignedUp")] Player player, bool redirect = false)
         {
             if (ModelState.IsValid)
             {
                 await _playerService.Create(player);
-                return RedirectToAction(nameof(Index));
+                if (redirect) RedirectToAction(nameof(Index));
             }
-            return View(player);
-        }
-
-        public void Create(string firstName)
-        {
-            Console.WriteLine(firstName);
         }
 
         // GET: Player/Edit/5
@@ -73,19 +66,13 @@ namespace RestoreFootball.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Rating")] Player player)
+        public async Task<IActionResult> Edit([Bind("Id,FirstName,LastName,SignedUp")] Player player)
         {
-            if (id != player.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await _playerService.Edit(id, player);
+                    await _playerService.Edit(player);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
