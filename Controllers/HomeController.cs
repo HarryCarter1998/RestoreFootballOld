@@ -20,7 +20,7 @@ namespace RestoreFootball2.Controllers
 
         public async Task<IActionResult> IndexAsync()
         {
-            ViewBag.Players = await _playerService.Index();
+            ViewBag.Players = await _playerService.GetRemainingPlayers();
             return View();
         }
 

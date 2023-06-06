@@ -24,5 +24,9 @@ namespace RestoreFootball.Data.Services
         void AddExistingPlayer(Player player);
 
         void AddNewPlayer(Player player);
+
+        void UpdateSignedUp(int id, bool signUp);
+
+        Task<IEnumerable<Player>> GetRemainingPlayers();
     }
 }

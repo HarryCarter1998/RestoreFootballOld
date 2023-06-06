@@ -23,14 +23,12 @@ function addExistingPlayer(player) {
 
     var playerId = player.getAttribute("value");
 
-    var updatedPlayer = { Id: playerId, SignedUp: true };
     $.ajax({
         type: 'POST',
-        url: '../Players/Edit',
+        url: '../Players/UpdateSignedUp',
         cache: false,
-        data: { player: { ...updatedPlayer } }
+        data: {id: playerId, signUp: true}
     });
-
 
     dropdownContent.style.display = 'none';
     search.classList.toggle("hide");
