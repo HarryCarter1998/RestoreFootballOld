@@ -95,5 +95,10 @@ namespace RestoreFootball.Data.Services
         { 
             return await _context.Player.Where(p => p.SignedUp == false).ToListAsync();
         }
+
+        public async Task<IEnumerable<Player>> GetSignedUpPlayers()
+        {
+            return await _context.Player.Where(p => p.SignedUp == true).ToListAsync();
+        }
     }
 }

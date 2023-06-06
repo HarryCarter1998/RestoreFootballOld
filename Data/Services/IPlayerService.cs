@@ -28,5 +28,7 @@ namespace RestoreFootball.Data.Services
         void UpdateSignedUp(int id, bool signUp);
 
         Task<IEnumerable<Player>> GetRemainingPlayers();
+
+        Task<IEnumerable<Player>> GetSignedUpPlayers();
     }
 }

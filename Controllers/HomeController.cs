@@ -24,9 +24,11 @@ namespace RestoreFootball2.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult GetSignedUpPlayers()
         {
-            return View();
+            var players = _playerService.GetSignedUpPlayers().Result;
+
+            return Json(players);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

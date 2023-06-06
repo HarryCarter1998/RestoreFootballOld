@@ -34,3 +34,7 @@
 #success{
     color: green;
 }
+
+.teamPlayer {
+    display: block !important;
+}
