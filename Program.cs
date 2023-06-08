@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using RestoreFootball.Data;
 using RestoreFootball.Data.Services;
 

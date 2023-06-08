@@ -4,8 +4,8 @@
 
 function addNewPlayer() {
     createNewPlayer();
-    toggleNewPlayerFormVisibility();
-    toggleIntro();
+    document.getElementById("add-new").style.display = "none";
+    document.getElementById("success-view").style.display = "block";
 }
 
 function createNewPlayer() {
@@ -17,14 +17,11 @@ function createNewPlayer() {
         url: '../Players/Create',
         cache: false,
         data: { FirstName: firstName, LastName: lastName, SignedUp: true },
-        success: function (players) { getSignedUpPlayers() }
+        success: function () { getSignedUpPlayers() }
     });
 }
 
 function addExistingPlayer(player) {
-    var dropdownContent = document.getElementById("dropdown-content");
-    var search = document.getElementById("playerSearch");
-    var cantSeeName = document.getElementById("cant-see-name");
 
     var playerId = player.getAttribute("value");
 
@@ -33,14 +30,11 @@ function addExistingPlayer(player) {
         url: '../Players/UpdateSignedUp',
         cache: false,
         data: { id: playerId, signUp: true },
-        success: function (players) { getSignedUpPlayers() }
+        success: function () { getSignedUpPlayers() }
     });
 
-    dropdownContent.style.display = 'none';
-    search.classList.toggle("hide");
-    cantSeeName.classList.toggle("hide");
-
-    toggleIntro();
+    document.getElementById("add-existing").style.display = "none";
+    document.getElementById("success-view").style.display = "block";
 }
 
 function getSignedUpPlayers() {
@@ -51,93 +45,39 @@ function getSignedUpPlayers() {
 }
 
 function displayTeams(players) {
-    var yellowTeam = [];
-    var greenTeam = [];
-    var orangeTeam = [];
-    var nonBibsTeam = [];
-
-    players.forEach(player => {
-        switch (player.team) {
-            case 0:
-                yellowTeam.push(player);
-                break;
-            case 1:
-                greenTeam.push(player);
-                break;
-            case 2:
-                orangeTeam.push(player);
-                break;
-            default:
-                nonBibsTeam.push(player);
-        }
-    });
 
     document.querySelectorAll('.teamPlayer').forEach(e => e.remove());
 
-    yellowTeam.forEach(player => {
-        const para = document.createElement("p");
-        const node = document.createTextNode(`${player.firstName} ${player.lastName}`)
-        para.appendChild(node);
-        para.classList.add("teamPlayer");
-        document.getElementById("yellow").appendChild(para);
+    const teams = {
+        0: 'yellow',
+        1: 'green',
+        2: 'orange',
+        3: 'non-bibs'
+    };
 
-    })
-    greenTeam.forEach(player => {
-        const para = document.createElement("p");
-        const node = document.createTextNode(`${player.firstName} ${player.lastName}`)
-        para.appendChild(node);
-        para.classList.add("teamPlayer");
-        document.getElementById("green").appendChild(para);
-    })
-    orangeTeam.forEach(player => {
-        const para = document.createElement("p");
-        const node = document.createTextNode(`${player.firstName} ${player.lastName}`)
-        para.appendChild(node);
-        para.classList.add("teamPlayer");
-        document.getElementById("orange").appendChild(para);
-    })
-    nonBibsTeam.forEach(player => {
-        const para = document.createElement("p");
-        const node = document.createTextNode(`${player.firstName} ${player.lastName}`)
-        para.appendChild(node);
-        para.classList.add("teamPlayer");
-        document.getElementById("non-bibs").appendChild(para);
-    })
+    players.forEach(player => {
+        addTeamPlayerElement(player, teams)
+    });
+}
 
+function addTeamPlayerElement(player, teams) {
+    const team = teams[player.team];
+    const para = document.createElement("p");
+    const node = document.createTextNode(`${player.firstName} ${player.lastName}`)
+    para.appendChild(node);
+    para.classList.add("teamPlayer");
+    document.getElementById(team).appendChild(para);
 }
 
 function switchForm() {
-    toggleExistingPlayerFormVisibility();
-    toggleNewPlayerFormVisibility();
+    document.getElementById("add-existing").style.display = "none";
+    document.getElementById("add-new").style.display = "block";
 }
 
 function resetForm() {
-    toggleExistingPlayerFormVisibility();
-    toggleIntro();
+    document.getElementById("add-existing").style.display = "";
+    document.getElementById("success-view").style.display = "";
+    document.getElementById("dropdown-content").style.display = "";
+
     document.getElementById("playerSearch").value = "";
-}
-
-function toggleIntro() {
-    var enterName = document.getElementById("enter-name");
-    var success = document.getElementById("success");
-    var addAnother = document.getElementById("add-another");
-    enterName.classList.toggle('hide');
-    success.classList.toggle('hide');
-    addAnother.classList.toggle('hide');
-}
-
-function toggleExistingPlayerFormVisibility() {
-    var search = document.getElementById("playerSearch");
-    var cantSeeName = document.getElementById("cant-see-name");
-    search.classList.toggle("hide");
-    cantSeeName.classList.toggle("hide");
-}
-
-function toggleNewPlayerFormVisibility() {
-    var newPlayerInputs = document.querySelectorAll('.newPlayerInput');
-    var addButton = document.getElementById("add-button");
-    for (var i = 0; i < newPlayerInputs.length; i++) {
-        newPlayerInputs[i].classList.toggle("showInlineBlock");
-    }
-    addButton.classList.toggle("showInlineBlock");
 }
