@@ -1,5 +1,6 @@
 ﻿document.addEventListener("DOMContentLoaded", function () {
-    getSignedUpPlayers();
+    //getSignedUpPlayers();
+    recalculateTeams();
 });
 
 function addNewPlayer() {
@@ -17,7 +18,7 @@ function createNewPlayer() {
         url: '../Players/Create',
         cache: false,
         data: { FirstName: firstName, LastName: lastName, SignedUp: true },
-        success: function () { getSignedUpPlayers() }
+        success: function () { recalculateTeams() }
     });
 }
 
@@ -30,7 +31,7 @@ function addExistingPlayer(player) {
         url: '../Players/UpdateSignedUp',
         cache: false,
         data: { id: playerId, signUp: true },
-        success: function () { getSignedUpPlayers() }
+        success: function () { recalculateTeams() }
     });
 
     document.getElementById("add-existing").style.display = "none";
@@ -80,4 +81,11 @@ function resetForm() {
     document.getElementById("dropdown-content").style.display = "";
 
     document.getElementById("playerSearch").value = "";
+}
+
+function recalculateTeams() {
+    $.ajax({
+        url: '../Home/RecalculateTeams',
+        success: function (players) { displayTeams(players) }
+    });
 }

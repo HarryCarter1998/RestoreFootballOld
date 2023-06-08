@@ -31,6 +31,13 @@ namespace RestoreFootball2.Controllers
             return Json(players);
         }
 
+        public IActionResult RecalculateTeams()
+        {
+            var players = _playerService.RecalculateTeams(2).Result;
+
+            return Json(players);
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

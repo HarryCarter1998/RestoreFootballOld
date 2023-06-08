@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Elfie.Model.Tree;
 using RestoreFootball.Models;
 
 namespace RestoreFootball.Data.Services
@@ -30,5 +31,7 @@ namespace RestoreFootball.Data.Services
         Task<IEnumerable<Player>> GetRemainingPlayers();
 
         Task<IEnumerable<Player>> GetSignedUpPlayers();
+
+        Task<IEnumerable<Player>> RecalculateTeams(int numTeams);
     }
 }
