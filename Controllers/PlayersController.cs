@@ -46,13 +46,14 @@ namespace RestoreFootball.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public async Task Create([Bind("FirstName,LastName,SignedUp")] Player player, bool redirect = false)
+        public async Task<ActionResult> Create([Bind("FirstName,LastName,SignedUp")] Player player, bool redirect = true)
         {
             if (ModelState.IsValid)
             {
                 await _playerService.Create(player);
-                if (redirect) RedirectToAction(nameof(Index));
+                if (redirect) return Redirect("~/Players/Index");
             }
+            return Ok();
         }
 
         // GET: Player/Edit/5
