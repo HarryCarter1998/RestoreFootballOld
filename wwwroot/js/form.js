@@ -33,6 +33,7 @@ function addExistingPlayer(player) {
         success: function () { recalculateTeams() }
     });
 
+    player.remove();
     document.getElementById("add-existing").style.display = "none";
     document.getElementById("success-view").style.display = "block";
 }

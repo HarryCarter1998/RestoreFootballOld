@@ -32,6 +32,6 @@ namespace RestoreFootball.Data.Services
 
         Task<IEnumerable<Player>> GetSignedUpPlayers();
 
-        Task<IEnumerable<Player>> RecalculateTeams(int numTeams);
+        Task<IEnumerable<Player>> RecalculateTeams();
     }
 }

@@ -105,10 +105,12 @@ namespace RestoreFootball.Data.Services
             return await _context.Player.Where(p => p.SignedUp == true).ToListAsync();
         }
 
-        public async Task<IEnumerable<Player>> RecalculateTeams(int numTeams)
+        public async Task<IEnumerable<Player>> RecalculateTeams()
         {
 
             List<Player> players = (List<Player>)await GetSignedUpPlayers();
+
+            var numTeams = players.Count >= 20 ? 4 : 2;
 
             var teamsAndRatings = new (int TeamNumber, int Rating)[players.Count];
 
