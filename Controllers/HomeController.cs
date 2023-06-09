@@ -33,7 +33,7 @@ namespace RestoreFootball2.Controllers
 
         public IActionResult RecalculateTeams()
         {
-            var players = _playerService.RecalculateTeams(2).Result;
+            var players = _playerService.RecalculateTeams(4).Result;
 
             return Json(players);
         }

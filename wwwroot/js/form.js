@@ -1,6 +1,5 @@
 ﻿document.addEventListener("DOMContentLoaded", function () {
-    //getSignedUpPlayers();
-    recalculateTeams();
+    getSignedUpPlayers();
 });
 
 function addNewPlayer() {

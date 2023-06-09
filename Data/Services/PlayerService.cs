@@ -120,7 +120,7 @@ namespace RestoreFootball.Data.Services
             double bestDiff = 99;
             var bestTeamsAndRatings = new (int TeamNumber, int Rating)[players.Count];
 
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 10000; i++)
             {
                 int n = teamsAndRatings.Length;
                 while (n > 1)
@@ -140,9 +140,8 @@ namespace RestoreFootball.Data.Services
 
                 if (diff < bestDiff)
                 {
-                    Debug.WriteLine("better diff " + diff);
                     bestDiff = diff;
-                    bestTeamsAndRatings = teamsAndRatings;
+                    bestTeamsAndRatings = teamsAndRatings.ToArray();
                 }
             }
 
@@ -154,7 +153,7 @@ namespace RestoreFootball.Data.Services
             await _context.SaveChangesAsync();
 
             Debug.WriteLine(string.Join(", ", bestTeamsAndRatings));
-            Debug.WriteLine(bestDiff);
+            Debug.WriteLine($"{Math.Round(bestDiff*100, 2)}% difference");
 
             return players;
         }
