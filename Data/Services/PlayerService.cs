@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using RestoreFootball.Models;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
 
 namespace RestoreFootball.Data.Services
 {
@@ -92,7 +89,6 @@ namespace RestoreFootball.Data.Services
             if (playerToUpdate != null) playerToUpdate.SignedUp = signUp;
 
             _context.SaveChanges();
-
         }
 
         public async Task<IEnumerable<Player>> GetRemainingPlayers()
@@ -109,6 +105,8 @@ namespace RestoreFootball.Data.Services
         {
 
             List<Player> players = (List<Player>)await GetSignedUpPlayers();
+
+            if (!players.Any()) { return players; }
 
             var numTeams = players.Count >= 20 ? 4 : 2;
 

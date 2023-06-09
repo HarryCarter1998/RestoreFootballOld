@@ -50,15 +50,36 @@ function displayTeams(players) {
     document.querySelectorAll('.teamPlayer').forEach(e => e.remove());
 
     const teams = {
-        0: 'yellow',
-        1: 'green',
-        2: 'orange',
-        3: 'non-bibs'
+        0: 'green',
+        1: 'non-bibs',
+        2: 'yellow',
+        3: 'orange'
     };
 
     players.forEach(player => {
         addTeamPlayerElement(player, teams)
     });
+
+    if (players.length >= 20) {
+        displayFourTeams();
+    }
+    else {
+        displayTwoTeams();
+    }
+}
+
+function displayFourTeams() {
+    document.getElementById("yellow").style.display = "inline-block";
+    document.getElementById("orange").style.display = "inline-block";
+    document.getElementById("green").getElementsByTagName("h3")[0].innerHTML = "Greens";
+
+}
+
+function displayTwoTeams() {
+    document.getElementById("yellow").style.display = "none";
+    document.getElementById("orange").style.display = "none";
+    document.getElementById("green").getElementsByTagName("h3")[0].innerHTML = "Bibs";
+
 }
 
 function addTeamPlayerElement(player, teams) {
@@ -67,7 +88,20 @@ function addTeamPlayerElement(player, teams) {
     const node = document.createTextNode(`${player.firstName} ${player.lastName}`)
     para.appendChild(node);
     para.classList.add("teamPlayer");
+    para.onclick = function () {
+        cancelSignUp(player.id);
+    }
     document.getElementById(team).appendChild(para);
+}
+
+function cancelSignUp(playerId) {
+    $.ajax({
+        type: 'POST',
+        url: '../Players/UpdateSignedUp',
+        cache: false,
+        data: { id: playerId, signUp: false },
+        success: function () { recalculateTeams() }
+    });
 }
 
 function switchForm() {
@@ -79,7 +113,6 @@ function resetForm() {
     document.getElementById("add-existing").style.display = "";
     document.getElementById("success-view").style.display = "";
     document.getElementById("dropdown-content").style.display = "";
-
     document.getElementById("playerSearch").value = "";
 }
 

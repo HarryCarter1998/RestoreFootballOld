@@ -46,4 +46,28 @@
 
 .teamPlayer {
     display: block !important;
+    cursor: pointer;
 }
+
+    .teamPlayer:hover {
+        text-decoration: line-through;
+    }
+
+
+.row {
+    display: flex;
+    justify-content: center;
+}
+
+#yellow, #orange {
+    display: none;
+}
+
+#yellow, #orange {
+    display: none;
+}
+
+
+
+
+

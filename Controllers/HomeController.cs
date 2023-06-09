@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RestoreFootball.Controllers;
 using RestoreFootball.Data.Services;
-using RestoreFootball.Models;
 using RestoreFootball2.Models;
 using System.Diagnostics;
 
@@ -21,6 +19,7 @@ namespace RestoreFootball2.Controllers
         public async Task<IActionResult> IndexAsync()
         {
             ViewBag.RemainingPlayers = await _playerService.GetRemainingPlayers();
+            ViewBag.NumTeams = _playerService.GetSignedUpPlayers().Result.Count() >= 20 ? 4 : 2;
             return View();
         }
 

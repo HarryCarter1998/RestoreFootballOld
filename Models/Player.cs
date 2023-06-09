@@ -11,5 +11,5 @@ namespace RestoreFootball.Models
         public Team Team { get; set; } = 0;
     }
 
-    public enum Team { Yellow, Green, Orange, NonBibs }
+    public enum Team { Green, NonBibs, Yellow, Orange }
 }
