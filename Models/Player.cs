@@ -8,7 +8,7 @@ namespace RestoreFootball.Models
         public string? LastName { get; set; }
         public int Rating { get; set; } = 5;
         public bool SignedUp { get; set; } = false;
-        public Team Team { get; set; } = (Team)Enum.GetValues(typeof(Team)).GetValue(new Random().Next(Enum.GetValues(typeof(Team)).Length));
+        public Team Team { get; set; } = 0;
     }
 
     public enum Team { Yellow, Green, Orange, NonBibs }

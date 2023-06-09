@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestoreFootball.Models;
+using System.Diagnostics;
+using System.Drawing;
+using System.Linq;
 
 namespace RestoreFootball.Data.Services
 {
@@ -29,6 +32,7 @@ namespace RestoreFootball.Data.Services
 
         public async Task Create(Player player)
         {
+            player.Rating = (int)Math.Round(_context.Player.Average(p => p.Rating));
             _context.Add(player);
             await _context.SaveChangesAsync();
         }
@@ -101,156 +105,56 @@ namespace RestoreFootball.Data.Services
             return await _context.Player.Where(p => p.SignedUp == true).ToListAsync();
         }
 
-        public async Task<IEnumerable<Player>> RecalculateTeamsMiniMaxAlgorithm()
-        {
-            List<Player> players = (List<Player>) await GetSignedUpPlayers();
-            // Sort the players based on their skill level
-            players.Sort((p1, p2) => p1.Rating.CompareTo(p2.Rating));
-
-            // Divide the players into teams using the minimax algorithm
-            int numTeams = 2;
-            int numPlayersPerTeam = players.Count / numTeams;
-
-            for (int i = 0; i < numPlayersPerTeam; i++)
-            {
-                for (int j = 0; j < numTeams; j++)
-                {
-                    int index = i * numTeams + j;
-                    players[index].Team = (Team) (j + 1);
-                }
-            }
-
-            // Assign any remaining players to teams
-            for (int i = numPlayersPerTeam * numTeams; i < players.Count; i++)
-            {
-                players[i].Team = (Team) (i % numTeams + 1);
-            }
-
-            await _context.SaveChangesAsync();
-
-            // Log each team with the overall rating for that team
-            for (int i = 1; i <= numTeams; i++)
-            {
-                var teamPlayers = players.Where(p => p.Team == (Team) i);
-                var teamRating = teamPlayers.Sum(p => p.Rating);
-                System.Diagnostics.Debug.WriteLine($"Team {i}: {teamRating}");
-            }
-
-            return players;
-        }
-
-        public async Task<IEnumerable<Player>> RecalculateTeams()
-        {
-            List<Player> players = (List<Player>)await GetSignedUpPlayers();
-            // Sort the players based on their skill level
-            players.Sort((p1, p2) => p2.Rating.CompareTo(p1.Rating));
-
-            // Divide the players into teams using the greedy algorithm
-            int numTeams = 2;
-            int numPlayersPerTeam = players.Count / numTeams;
-
-            for (int i = 0; i < numPlayersPerTeam; i++)
-            {
-                
-                    for (int j = 0; j < numTeams; j++)
-                    {
-                    int index = i * numTeams + j;
-                    if (i % 2 == 0)
-                        {
-                            players[index].Team = (Team)j;
-                        }
-                        else
-                        {
-                            players[index].Team = (Team)numTeams - j - 1;
-                        }
-
-                    }
-                
-            }
-
-            // Assign any remaining players to teams
-            for (int i = numPlayersPerTeam * numTeams; i < players.Count; i++)
-            {
-                var team1Rating = players.Where(p => p.Team == Team.Yellow).Sum(p => p.Rating);
-                var team2Rating = players.Where(p => p.Team == Team.Green).Sum(p => p.Rating);
-
-                if (team1Rating < team2Rating)
-                {
-                    players[i].Team = Team.Yellow;
-                }
-                else
-                {
-                    players[i].Team = Team.Green;
-                }
-            }
-
-            await _context.SaveChangesAsync();
-
-            // Log each team with the overall rating for that team
-            for (int i = 0; i < numTeams; i++)
-            {
-                var teamPlayers = players.Where(p => p.Team == (Team)i);
-                var teamRating = teamPlayers.Sum(p => p.Rating);
-                System.Diagnostics.Debug.WriteLine($"Team {i}: {teamRating}");
-            }
-
-            return players;
-        }
-
         public async Task<IEnumerable<Player>> RecalculateTeams(int numTeams)
         {
+
             List<Player> players = (List<Player>)await GetSignedUpPlayers();
-            // Sort the players based on their skill level
-            players.Sort((p1, p2) => p2.Rating.CompareTo(p1.Rating));
 
-            // Divide the players into teams using the snake draft algorithm
-            int numPlayersPerTeam = players.Count / numTeams;
-            int direction = 1;
-            int index = 0;
+            var teamsAndRatings = new (int TeamNumber, int Rating)[players.Count];
 
-            for (int i = 0; i < numPlayersPerTeam; i++)
+            for (int i = 0; i < teamsAndRatings.Length; i++)
             {
-                for (int j = 0; j < numTeams; j++)
-                {
-                    if (direction == 1)
-                    {
-                        index = i * numTeams + j;
-                    }
-                    else
-                    {
-                        index = (i + 1) * numTeams - j - 1;
-                    }
-
-                    players[index].Team = (Team)j;
-                }
-
-                direction *= -1;
+                teamsAndRatings[i] = (i % numTeams, players[i].Rating);
             }
 
-            // Assign any remaining players to teams
-            for (int i = numPlayersPerTeam * numTeams; i < players.Count; i++)
-            {
-                var teamRatings = new Dictionary<Team, int>();
+            double bestDiff = 99;
+            var bestTeamsAndRatings = new (int TeamNumber, int Rating)[players.Count];
 
-                foreach (var team in Enum.GetValues(typeof(Team)).Cast<Team>())
+            for (int i = 0; i < 100; i++)
+            {
+                int n = teamsAndRatings.Length;
+                while (n > 1)
                 {
-                    teamRatings[team] = players.Where(p => p.Team == team).Sum(p => p.Rating);
+                    n--;
+                    int k = new Random().Next(n + 1);
+                    int value = teamsAndRatings[k].TeamNumber;
+                    teamsAndRatings[k].TeamNumber = teamsAndRatings[n].TeamNumber;
+                    teamsAndRatings[n].TeamNumber = value;
                 }
 
-                var minRatingTeam = teamRatings.OrderBy(x => x.Value).First().Key;
+                var teamRatings = teamsAndRatings.GroupBy(t => t.TeamNumber)
+                  .Select(g => g.Sum(t => t.Rating))
+                  .ToArray();
 
-                players[i].Team = minRatingTeam;
+                var diff = (teamRatings.Max() - teamRatings.Min()) / teamRatings.Average();
+
+                if (diff < bestDiff)
+                {
+                    Debug.WriteLine("better diff " + diff);
+                    bestDiff = diff;
+                    bestTeamsAndRatings = teamsAndRatings;
+                }
+            }
+
+            for (int l = 0; l < players.Count; l++)
+            {
+                players[l].Team = (Team)bestTeamsAndRatings[l].TeamNumber;
             }
 
             await _context.SaveChangesAsync();
 
-            // Log each team with the overall rating for that team
-            for (int i = 0; i < numTeams; i++)
-            {
-                var teamPlayers = players.Where(p => p.Team == (Team)i);
-                var teamRating = teamPlayers.Sum(p => p.Rating);
-                System.Diagnostics.Debug.WriteLine($"Team {i}: {teamRating}");
-            }
+            Debug.WriteLine(string.Join(", ", bestTeamsAndRatings));
+            Debug.WriteLine(bestDiff);
 
             return players;
         }
