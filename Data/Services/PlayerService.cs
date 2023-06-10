@@ -108,6 +108,17 @@ namespace RestoreFootball.Data.Services
 
             if (!players.Any()) { return players; }
 
+            var teamsAndRatings = ((int TeamNumber, int Rating)[])CreateTeamsAndRatings(players);
+
+            var bestTeamsAndRatings = ((int TeamNumber, int Rating)[])FindBestTeamsAndRatings(players.Count, teamsAndRatings);
+
+            await AssignTeams(players, bestTeamsAndRatings);
+
+            return players;
+        }
+
+        private object CreateTeamsAndRatings(List<Player> players)
+        {
             var numTeams = players.Count >= 20 ? 4 : 2;
 
             var teamsAndRatings = new (int TeamNumber, int Rating)[players.Count];
@@ -117,20 +128,17 @@ namespace RestoreFootball.Data.Services
                 teamsAndRatings[i] = (i % numTeams, players[i].Rating);
             }
 
+            return teamsAndRatings;
+        }
+
+        private object FindBestTeamsAndRatings(int playerCount, (int TeamNumber, int Rating)[] teamsAndRatings)
+        {
             double bestDiff = 99;
-            var bestTeamsAndRatings = new (int TeamNumber, int Rating)[players.Count];
+            var bestTeamsAndRatings = new (int TeamNumber, int Rating)[playerCount];
 
             for (int i = 0; i < 10000; i++)
             {
-                int n = teamsAndRatings.Length;
-                while (n > 1)
-                {
-                    n--;
-                    int k = new Random().Next(n + 1);
-                    int value = teamsAndRatings[k].TeamNumber;
-                    teamsAndRatings[k].TeamNumber = teamsAndRatings[n].TeamNumber;
-                    teamsAndRatings[n].TeamNumber = value;
-                }
+                teamsAndRatings = ((int TeamNumber, int Rating)[])ShuffleTeams(teamsAndRatings);
 
                 var teamRatings = teamsAndRatings.GroupBy(t => t.TeamNumber)
                   .Select(g => g.Sum(t => t.Rating))
@@ -145,19 +153,34 @@ namespace RestoreFootball.Data.Services
                 }
             }
 
+            Debug.WriteLine(string.Join(", ", bestTeamsAndRatings));
+            Debug.WriteLine($"{Math.Round(bestDiff*100, 2)}% difference");
+
+            return bestTeamsAndRatings;
+        }
+
+        private async Task AssignTeams(List<Player> players, (int TeamNumber, int Rating)[] bestTeamsAndRatings)
+        {
             for (int l = 0; l < players.Count; l++)
             {
                 players[l].Team = (Team)bestTeamsAndRatings[l].TeamNumber;
             }
 
             await _context.SaveChangesAsync();
-
-            Debug.WriteLine(string.Join(", ", bestTeamsAndRatings));
-            Debug.WriteLine($"{Math.Round(bestDiff*100, 2)}% difference");
-
-            return players;
         }
 
-
+        private object ShuffleTeams((int TeamNumber, int Rating)[] teamsAndRatings)
+        {
+            int n = teamsAndRatings.Length;
+            while (n > 1)
+            {
+                n--;
+                int k = new Random().Next(n + 1);
+                int value = teamsAndRatings[k].TeamNumber;
+                teamsAndRatings[k].TeamNumber = teamsAndRatings[n].TeamNumber;
+                teamsAndRatings[n].TeamNumber = value;
+            }
+            return teamsAndRatings;
+        }
     }
 }
