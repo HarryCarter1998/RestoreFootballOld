@@ -1,0 +1,48 @@
+﻿@model RestoreFootball.Models.Gameweek
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Gameweek</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="GreenScore" class="control-label"></label>
+                <input asp-for="GreenScore" class="form-control" />
+                <span asp-validation-for="GreenScore" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NonBibsScore" class="control-label"></label>
+                <input asp-for="NonBibsScore" class="form-control" />
+                <span asp-validation-for="NonBibsScore" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="YellowScore" class="control-label"></label>
+                <input asp-for="YellowScore" class="form-control" />
+                <span asp-validation-for="YellowScore" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OrangeScore" class="control-label"></label>
+                <input asp-for="OrangeScore" class="form-control" />
+                <span asp-validation-for="OrangeScore" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

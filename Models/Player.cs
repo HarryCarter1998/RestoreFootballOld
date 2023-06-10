@@ -9,6 +9,7 @@ namespace RestoreFootball.Models
         public int Rating { get; set; } = 5;
         public bool SignedUp { get; set; } = false;
         public Team Team { get; set; } = 0;
+        public virtual ICollection<GameweekPlayer>? GameweekPlayers { get; set; }
     }
 
     public enum Team { Green, NonBibs, Yellow, Orange }
