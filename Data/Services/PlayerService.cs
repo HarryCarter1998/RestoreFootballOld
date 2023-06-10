@@ -135,8 +135,9 @@ namespace RestoreFootball.Data.Services
         {
             double bestDiff = 99;
             var bestTeamsAndRatings = new (int TeamNumber, int Rating)[playerCount];
+            var maxTries = Math.Pow(playerCount / 2, 3);
 
-            for (int i = 0; i < 10000; i++)
+            for (int i = 0; i < maxTries; i++)
             {
                 teamsAndRatings = ((int TeamNumber, int Rating)[])ShuffleTeams(teamsAndRatings);
 
@@ -151,10 +152,13 @@ namespace RestoreFootball.Data.Services
                     bestDiff = diff;
                     bestTeamsAndRatings = teamsAndRatings.ToArray();
                 }
+
+                //Debug.WriteLine($"i: {i}, bestDiff: {bestDiff}");
+                if (bestDiff < 0.01 || (bestDiff < 0.05 && i > 500)) { break; }
             }
 
-            Debug.WriteLine(string.Join(", ", bestTeamsAndRatings));
-            Debug.WriteLine($"{Math.Round(bestDiff*100, 2)}% difference");
+            //Debug.WriteLine(string.Join(", ", bestTeamsAndRatings));
+            //Debug.WriteLine($"{Math.Round(bestDiff*100, 2)}% difference");
 
             return bestTeamsAndRatings;
         }
