@@ -1,0 +1,43 @@
+﻿@model RestoreFootball.Models.Gameweek
+
+@{
+    ViewData["Title"] = "Update Gameweek";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Update" asp-controller="Gameweeks" method="post">
+    <div class="score">
+        <label asp-for="GreenScore" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="GreenScore" class="form-control" type="number" max="9" min="0" style="width: 50px;" />
+            <span asp-validation-for="GreenScore" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="score">
+        <label asp-for="NonBibsScore" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="NonBibsScore" class="form-control" type="number" max="9" min="0" style="width: 50px;" />
+            <span asp-validation-for="NonBibsScore" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="score">
+        <label asp-for="YellowScore" style="width: 200px"></label>
+        <div>
+            <input asp-for="YellowScore" class="form-control" type="number" max="9" min="0" style="width: 50px;" />
+            <span asp-validation-for="YellowScore" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="score">
+        <label asp-for="OrangeScore" style="width: 200px"></label>
+        <div class="">
+            <input asp-for="OrangeScore" class="form-control" type="number" max="9" min="0" style="width: 50px;" />
+            <span asp-validation-for="OrangeScore" class="text-danger"></span>
+        </div>
+    </div>
+
+    <input type="submit" value="Save" class="btn btn-primary" />
+    <a href="#" data-dismiss="modal">Cancel</a>
+</form>
+
+
