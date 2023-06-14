@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using RestoreFootball.Models;
 
 namespace RestoreFootball.Data
@@ -14,8 +10,10 @@ namespace RestoreFootball.Data
         {
         }
 
-        public DbSet<RestoreFootball.Models.Player> Player { get; set; } = default!;
+        public DbSet<Player> Player { get; set; } = default!;
 
-        public DbSet<RestoreFootball.Models.Gameweek> Gameweek { get; set; } = default!;
+        public DbSet<Gameweek> Gameweek { get; set; } = default!;
+
+        public DbSet<GameweekPlayer> GameweekPlayer { get; set; } = default!;
     }
 }

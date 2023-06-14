@@ -102,9 +102,15 @@ namespace RestoreFootball.Controllers
         }
 
         [HttpPost]
-        public void UpdateSignedUp(int id, bool signUp)
+        public void SignUp(int id)
         {
-            _playerService.UpdateSignedUp(id, signUp);
+            _playerService.SignUp(id);
+        }
+
+        [HttpPost]
+        public void CancelSignUp(int id)
+        {
+            _playerService.CancelSignUp(id);
         }
     }
 }

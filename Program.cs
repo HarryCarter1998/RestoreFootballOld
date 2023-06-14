@@ -9,6 +9,7 @@ builder.Services.AddDbContext<RestoreFootballContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IPlayerService, PlayerService>();
+builder.Services.AddScoped<IGameweekService, GameweekService>();
 
 var app = builder.Build();
 

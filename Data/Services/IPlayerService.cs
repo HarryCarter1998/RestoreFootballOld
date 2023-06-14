@@ -26,12 +26,10 @@ namespace RestoreFootball.Data.Services
 
         void AddNewPlayer(Player player);
 
-        void UpdateSignedUp(int id, bool signUp);
+        void SignUp(int id);
+
+        void CancelSignUp(int id);
 
         Task<IEnumerable<Player>> GetRemainingPlayers();
-
-        Task<IEnumerable<Player>> GetSignedUpPlayers();
-
-        Task<IEnumerable<Player>> RecalculateTeams();
     }
 }

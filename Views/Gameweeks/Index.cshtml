@@ -13,6 +13,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.GreenScore)
             </th>
             <th>
@@ -30,6 +33,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Convert.ToString(string.Format("{0:dd/MM/yy}", item.Date))
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.GreenScore)
             </td>

@@ -1,38 +1,39 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RestoreFootball.Data.Services;
+using RestoreFootball.Models;
 using RestoreFootball2.Models;
 using System.Diagnostics;
 
-namespace RestoreFootball2.Controllers
+namespace RestoreFootball.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IPlayerService _playerService;
+        private readonly IGameweekService _gameweekService;
 
-        public HomeController(ILogger<HomeController> logger, IPlayerService playerService)
+        public HomeController(ILogger<HomeController> logger, IPlayerService playerService, IGameweekService gameweekService)
         {
             _logger = logger;
             _playerService = playerService;
+            _gameweekService = gameweekService;
         }
 
         public async Task<IActionResult> IndexAsync()
         {
             ViewBag.RemainingPlayers = await _playerService.GetRemainingPlayers();
-            ViewBag.NumTeams = _playerService.GetSignedUpPlayers().Result.Count() >= 20 ? 4 : 2;
+            ViewBag.NumTeams = _gameweekService.GetGameweekPlayers().Count() >= 20 ? 4 : 2;
             return View();
         }
 
-        public IActionResult GetSignedUpPlayers()
+        public IActionResult GetGameweekPlayers()
         {
-            var players = _playerService.GetSignedUpPlayers().Result;
-
-            return Json(players);
+            return Json(_gameweekService.GetGameweekPlayers());
         }
 
         public IActionResult RecalculateTeams()
         {
-            var players = _playerService.RecalculateTeams().Result;
+            var players = _gameweekService.RecalculateTeams().Result;
 
             return Json(players);
         }

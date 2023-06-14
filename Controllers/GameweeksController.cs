@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RestoreFootball.Data;
+using RestoreFootball.Data.Services;
 using RestoreFootball.Models;
 
 namespace RestoreFootball.Controllers
@@ -13,19 +14,21 @@ namespace RestoreFootball.Controllers
     public class GameweeksController : Controller
     {
         private readonly RestoreFootballContext _context;
+        private readonly IGameweekService _gameweekService;
 
-        public GameweeksController(RestoreFootballContext context)
+        public GameweeksController(RestoreFootballContext context, IGameweekService gameweekService)
         {
             _context = context;
+            _gameweekService = gameweekService;
         }
 
         // GET: Gameweeks
         public async Task<IActionResult> Index()
         {
-              return _context.Gameweek != null ? 
-                          View(await _context.Gameweek.ToListAsync()) :
-                          Problem("Entity set 'RestoreFootballContext.Gameweek'  is null.");
+            var gameweeks = await _context.Gameweek.OrderByDescending(g => g.Date).ToListAsync();
+            return _context.Gameweek != null ? View(gameweeks) : Problem("Entity set 'RestoreFootballContext.Gameweek'  is null.");
         }
+
 
         // GET: Gameweeks/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -88,34 +91,37 @@ namespace RestoreFootball.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,GreenScore,NonBibsScore,YellowScore,OrangeScore")] Gameweek gameweek)
+        public async Task<IActionResult> Edit([Bind("Id,GreenScore,NonBibsScore,YellowScore,OrangeScore")] Gameweek gameweek)
         {
-            if (id != gameweek.Id)
-            {
-                return NotFound();
-            }
+            //if (id != gameweek.Id)
+            //{
+            //    return NotFound();
+            //}
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(gameweek);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!GameweekExists(gameweek.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(gameweek);
+            //if (ModelState.IsValid)
+            //{
+            //    try
+            //    {
+            //        _context.Update(gameweek);
+            //        await _context.SaveChangesAsync();
+            //    }
+            //    catch (DbUpdateConcurrencyException)
+            //    {
+            //        if (!GameweekExists(gameweek.Id))
+            //        {
+            //            return NotFound();
+            //        }
+            //        else
+            //        {
+            //            throw;
+            //        }
+            //    }
+            //    return RedirectToAction(nameof(Index));
+            //}
+
+            await _gameweekService.Edit(gameweek);
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Gameweeks/Delete/5

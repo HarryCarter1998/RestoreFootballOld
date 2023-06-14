@@ -1,5 +1,5 @@
 ﻿document.addEventListener("DOMContentLoaded", function () {
-    getSignedUpPlayers();
+    getGameweekPlayers();
 });
 
 function addNewPlayer() {
@@ -23,13 +23,13 @@ function createNewPlayer() {
 
 function addExistingPlayer(player) {
 
-    var playerId = player.getAttribute("value");
+    var id = player.getAttribute("value");
 
     $.ajax({
         type: 'POST',
-        url: '../Players/UpdateSignedUp',
+        url: '../Players/SignUp',
         cache: false,
-        data: { id: playerId, signUp: true },
+        data: { id: id },
         success: function () { recalculateTeams() }
     });
 
@@ -38,9 +38,9 @@ function addExistingPlayer(player) {
     document.getElementById("success-view").style.display = "block";
 }
 
-function getSignedUpPlayers() {
+function getGameweekPlayers() {
     $.ajax({
-        url: '../Home/GetSignedUpPlayers',
+        url: '../Home/GetGameweekPlayers',
         success: function (players) { displayTeams(players) }
     });
 }
@@ -82,14 +82,14 @@ function displayTwoTeams() {
 
 }
 
-function addTeamPlayerElement(player, teams) {
-    const team = teams[player.team];
+function addTeamPlayerElement(gameweekPlayer, teams) {
+    const team = teams[gameweekPlayer.team];
     const para = document.createElement("p");
-    const node = document.createTextNode(`${player.firstName} ${player.lastName}`)
+    const node = document.createTextNode(`${gameweekPlayer.player.firstName} ${gameweekPlayer.player.lastName}`)
     para.appendChild(node);
     para.classList.add("teamPlayer");
     para.onclick = function () {
-        cancelSignUp(player.id);
+        cancelSignUp(gameweekPlayer.id);
     }
     document.getElementById(team).appendChild(para);
 }
@@ -97,9 +97,9 @@ function addTeamPlayerElement(player, teams) {
 function cancelSignUp(playerId) {
     $.ajax({
         type: 'POST',
-        url: '../Players/UpdateSignedUp',
+        url: '../Players/CancelSignUp',
         cache: false,
-        data: { id: playerId, signUp: false },
+        data: { id: playerId},
         success: function () { recalculateTeams() }
     });
 }

@@ -1,37 +1,37 @@
 ﻿@model RestoreFootball.Models.Gameweek
 
 @{
-    ViewData["Title"] = "Update Gameweek";
+    ViewData["Title"] = "Enter Results";
 }
 
 <h2>@ViewData["Title"]</h2>
 
-<form asp-action="Update" asp-controller="Gameweeks" method="post">
+<form asp-action="Edit" asp-controller="Gameweeks" method="post">
     <div class="score">
-        <label asp-for="GreenScore" class="col-sm-2 col-form-label"></label>
-        <div class="col-sm-10">
-            <input asp-for="GreenScore" class="form-control" type="number" max="9" min="0" style="width: 50px;" />
+        <label asp-for="GreenScore"></label>
+        <div>
+            <input asp-for="GreenScore" class="form-control" type="number" max="9" min="0"/>
             <span asp-validation-for="GreenScore" class="text-danger"></span>
         </div>
     </div>
     <div class="score">
-        <label asp-for="NonBibsScore" class="col-sm-2 col-form-label"></label>
-        <div class="col-sm-10">
-            <input asp-for="NonBibsScore" class="form-control" type="number" max="9" min="0" style="width: 50px;" />
+        <label asp-for="NonBibsScore"></label>
+        <div>
+            <input asp-for="NonBibsScore" class="form-control" type="number" max="9" min="0"/>
             <span asp-validation-for="NonBibsScore" class="text-danger"></span>
         </div>
     </div>
     <div class="score">
-        <label asp-for="YellowScore" style="width: 200px"></label>
+        <label asp-for="YellowScore"></label>
         <div>
-            <input asp-for="YellowScore" class="form-control" type="number" max="9" min="0" style="width: 50px;" />
+            <input asp-for="YellowScore" class="form-control" type="number" max="9" min="0"/>
             <span asp-validation-for="YellowScore" class="text-danger"></span>
         </div>
     </div>
     <div class="score">
-        <label asp-for="OrangeScore" style="width: 200px"></label>
+        <label asp-for="OrangeScore"></label>
         <div class="">
-            <input asp-for="OrangeScore" class="form-control" type="number" max="9" min="0" style="width: 50px;" />
+            <input asp-for="OrangeScore" class="form-control" type="number" max="9" min="0" />
             <span asp-validation-for="OrangeScore" class="text-danger"></span>
         </div>
     </div>
