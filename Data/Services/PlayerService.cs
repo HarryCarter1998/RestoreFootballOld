@@ -107,13 +107,13 @@ namespace RestoreFootball.Data.Services
             }
         }
 
-
-
         public async Task<IEnumerable<Player>> GetRemainingPlayers()
-        { 
-            return await _context.Player.Where(p => p.SignedUp == false).ToListAsync();
+        {
+            var latestGameweek = await _context.Gameweek.OrderByDescending(g => g.Date).FirstOrDefaultAsync();
+            var latestGameweekPlayers = latestGameweek.GameweekPlayers.Select(gp => gp.Player);
+            var allPlayers = await _context.Player.ToListAsync();
+            var remainingPlayers = allPlayers.Except(latestGameweekPlayers);
+            return remainingPlayers;
         }
-
-
     }
 }

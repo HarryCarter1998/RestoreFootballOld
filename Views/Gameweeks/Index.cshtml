@@ -37,17 +37,18 @@
                 @Convert.ToString(string.Format("{0:dd/MM/yy}", item.Date))
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.GreenScore)
+                @(item.GreenScore == null ? "TBD" : item.GreenScore)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.NonBibsScore)
+                @(item.NonBibsScore == null ? "TBD" : item.NonBibsScore)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.YellowScore)
+                @(item.YellowScore == null ? "TBD" : item.YellowScore)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.OrangeScore)
+                @(item.OrangeScore == null ? "TBD" : item.OrangeScore)
             </td>
+
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
