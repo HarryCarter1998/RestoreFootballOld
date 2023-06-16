@@ -13,9 +13,9 @@
 <div class="text-center">
     <h1 class="display-4">Restore Football</h1>
     <div id="add-existing">
-        <p>Enter your name below to sign up for Wednesday</p>
+        <p class="text">Enter your name below to sign up for Wednesday</p>
         <div class="dropdown">
-            <input type="text" placeholder="Search.." id="playerSearch" onkeyup="filterFunction()">
+            <input type="text" placeholder="Enter your name..." id="playerSearch" onkeyup="filterFunction()">
             <div id="dropdown-content" class="dropdown-content">
                 @{
                     foreach (var player in ViewBag.RemainingPlayers)
@@ -36,24 +36,25 @@
         <p id="success">Successfully signed up for Wednesday</p>
         <p class="subtleLink" onclick="resetForm()">Add another?</p>
     </div>
-
-    <h1 class="display-4">Teams as things stand</h1>
-    <div class="row">
-        <div id="yellow" class="col-sm-3">
-            <h3>Yellows</h3>
+    <div id="team-section">
+        <h2 class="display-5">Teams as things stand</h2>
+        <div class="row">
+            <div id="yellow" class="col-sm-2">
+                <h3>Yellows</h3>
+            </div>
+            <div id="green" class="col-sm-2">
+            <h3>Greens</h3>
+            </div>
+            <div id="orange" class="col-sm-2">
+                <h3>Oranges</h3>
+            </div>
+            <div id="non-bibs" class="col-sm-2">
+                <h3>Non-Bibs</h3>
+            </div>
         </div>
-        <div id="green" class="col-sm-3">
-        <h3>Greens</h3>
-        </div>
-        <div id="orange" class="col-sm-3">
-            <h3>Oranges</h3>
-        </div>
-        <div id="non-bibs" class="col-sm-3">
-            <h3>Non-Bibs</h3>
-        </div>
+        <button type="button" onclick="displayScores()" class="button" data-toggle="modal" data-target="#ResultsModal">
+            Enter Results
+        </button>
     </div>
-    <button type="button" onclick="displayScores()" class="btn btn-primary" data-toggle="modal" data-target="#ResultsModal">
-        Enter Results
-    </button>
     @await Html.PartialAsync("ResultsModalPartial")
 </div>

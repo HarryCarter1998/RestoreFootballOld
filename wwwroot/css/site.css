@@ -20,7 +20,8 @@ header {
 body {
     margin-bottom: 60px;
     /*background: #006542;*/
-    background: #3b3b3b
+    /*background: #3b3b3b*/
+    background: #424549;
 }
 
 .showBlock {
@@ -63,7 +64,8 @@ td, th {
 }
 
 .primary {
-    background-color: #595959;
+    /*background-color: #595959;*/
+    background-color: #00482F;
     color: white;
 }
 
@@ -101,7 +103,8 @@ tbody > tr:hover {
     }
 
 .subtleLink {
-    color: #595959;
+    padding-top: 10px;
+    color: gray;
     text-decoration: underline;
 }
 
@@ -112,4 +115,46 @@ tbody > tr:hover {
 .navbar {
     font-weight: bold;
     color: gray;
+}
+
+.display-4{
+    font-weight: bold;
+    color:darkgray;
+}
+
+.display-5 {
+    font-weight: bold;
+    color: darkgray;
+    margin: 10px
+}
+
+.text {
+    color: darkgray;
+}
+
+.col-sm-2{
+    width: 150px;
+}
+
+.button {
+    box-sizing: border-box;
+    font-size: 20px;
+    margin: 20px;
+    padding: 10px 20px 10px 20px;
+    border: none;
+    border-bottom: 2px solid #002208;
+    background-color: #00482F;
+    border-radius: 15px;
+    text-align: center;
+    color: lightgray;
+}
+
+    .button:hover {
+        background-color: #006542;
+        color: white;
+    }
+
+#team-section {
+    border: 3px solid #00482F;
+    border-radius: 15px;
 }
