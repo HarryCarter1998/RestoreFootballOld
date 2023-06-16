@@ -130,7 +130,11 @@ tbody > tr:hover {
 .display-5 {
     font-weight: bold;
     color: darkgray;
-    margin: 10px
+    margin: 0px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid #00482F;
 }
 
 .text {
@@ -138,7 +142,8 @@ tbody > tr:hover {
 }
 
 .col-sm-2 {
-    width: 150px;
+    width: 160px;
+    font-weight: bold;
 }
 
 .button {
@@ -160,7 +165,18 @@ tbody > tr:hover {
     }
 
 .bordered-container {
-    margin: 40px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     border: 3px solid #00482F;
+    border-radius: 15px;
+    background-color: #235836;
+}
+
+.container-header-seperator{
+    border-bottom: 3px solid #00482F;
+}
+
+.logo {
+    width:100%;
     border-radius: 15px;
 }
