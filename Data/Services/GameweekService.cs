@@ -47,6 +47,9 @@ namespace RestoreFootball.Data.Services
             dbGameweek.OrangeScore = gameweek.OrangeScore;
 
             _context.Update(dbGameweek);
+
+            AdjustPlayerRatings(dbGameweek);
+
             await _context.SaveChangesAsync();
 
             await CreateNextGameweek();
@@ -61,6 +64,36 @@ namespace RestoreFootball.Data.Services
                 .FirstOrDefaultAsync();
         }
 
+        private void AdjustPlayerRatings(Gameweek gameweek)
+        {
+            var highestScoringTeam = new List<(int? score, Team team)>
+                {
+                    (gameweek.GreenScore, Team.Green),
+                    (gameweek.NonBibsScore, Team.NonBibs),
+                    (gameweek.YellowScore, Team.Yellow),
+                    (gameweek.OrangeScore, Team.Orange)
+                }.Where(x => x.score.HasValue).OrderByDescending(x => x.score).First().team;
+
+            var lowestScoringTeam = new List<(int? score, Team team)>
+                {
+                    (gameweek.GreenScore, Team.Green),
+                    (gameweek.NonBibsScore, Team.NonBibs),
+                    (gameweek.YellowScore, Team.Yellow),
+                    (gameweek.OrangeScore, Team.Orange)
+                }.Where(x => x.score.HasValue).OrderBy(x => x.score).First().team;
+
+            gameweek.GameweekPlayers
+                .Where(gp => gp.Team == highestScoringTeam)
+                .Select(gp => gp.Player)
+                .ToList()
+                .ForEach(p => p.Rating++);
+
+            gameweek.GameweekPlayers
+                .Where(gp => gp.Team == lowestScoringTeam)
+                .Select(gp => gp.Player)
+                .ToList()
+                .ForEach(p => p.Rating--);
+        }
 
         public ICollection<GameweekPlayer> GetGameweekPlayers()
         {
@@ -154,11 +187,6 @@ namespace RestoreFootball.Data.Services
                 teamsAndRatings[n].TeamNumber = value;
             }
             return teamsAndRatings;
-        }
-
-        private GameweekPlayer GetLatestGameweekPlayer(Player player)
-        {
-            return player.GameweekPlayers.OrderByDescending(gp => gp.Gameweek.Date).FirstOrDefault();
         }
     }
 }

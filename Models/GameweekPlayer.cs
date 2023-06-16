@@ -12,4 +12,6 @@ namespace RestoreFootball.Models
         [JsonPropertyName("gameweek")]
         public virtual required Gameweek Gameweek { get; set; }
     }
+
+    public enum Team { Green, NonBibs, Yellow, Orange }
 }

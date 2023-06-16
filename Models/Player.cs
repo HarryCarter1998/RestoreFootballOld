@@ -13,6 +13,4 @@ namespace RestoreFootball.Models
         [JsonIgnore]
         public virtual ICollection<GameweekPlayer>? GameweekPlayers { get; set; } = new List<GameweekPlayer>();
     }
-
-    public enum Team { Green, NonBibs, Yellow, Orange }
 }
