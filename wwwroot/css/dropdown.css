@@ -45,6 +45,7 @@
     border: none;
     border-bottom: 1px solid #ddd;
     display: show;
+    background-color: #00482F;
 }
 
     /* The search field when it gets focus/clicked on */

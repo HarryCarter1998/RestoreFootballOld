@@ -13,8 +13,14 @@ html {
   min-height: 100%;
 }
 
+header {
+    background-color: #00482F;
+}
+
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    /*background: #006542;*/
+    background: #3b3b3b
 }
 
 .showBlock {
@@ -24,8 +30,6 @@ body {
 .showInlineBlock {
     display: inline-block;
 }
-
-/* make each h3 header from home index.cshtml the color that it represents*/
 
 #orange {
     color: orange;
@@ -45,3 +49,67 @@ body {
     align-items: center;
 }
 
+table {
+    border-collapse: collapse;
+    background-color: seagreen;
+    margin-left: auto;
+    margin-right: auto;
+}
+/* Spacing */
+td, th {
+    border: 1px solid #005638;
+    padding: 20px;
+    text-align: center;
+}
+
+.primary {
+    background-color: #595959;
+    color: white;
+}
+
+#name-label {
+    width: 250px;
+}
+
+#rating-label {
+    width: 100px;
+}
+
+#actions-label {
+    width: 250px;
+}
+
+tbody > tr:hover {
+    background-color: green;
+}
+
+#player-table {
+    max-width: 600px;
+}
+
+#gameweek-table{
+    max-width: 800px;
+}
+
+.actionIcon {
+    padding-left: 20px;
+    padding-right: 20px;
+    color: #595959;
+}
+    .actionIcon:hover {
+        color: #3b3b3b
+    }
+
+.subtleLink {
+    color: #595959;
+    text-decoration: underline;
+}
+
+    .subtleLink:hover {
+        cursor: pointer;
+    }
+
+.navbar {
+    font-weight: bold;
+    color: gray;
+}

@@ -3,45 +3,40 @@
 @{
     ViewData["Title"] = "Index";
 }
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
 
 <h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
+<table id="player-table" class="table">
+    <thead class="primary">
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
+            <th id="name-label">
+                Name
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
+            <th id="rating-label">
+                Rating
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Rating)
-            </th>
-            <th></th>
+            <th id="actions-label"></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rating)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @item.FirstName @item.LastName
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rating)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="actionIcon fas fa-edit"></i></a> |
+                    <a asp-action="Details" asp-route-id="@item.Id"><i class="actionIcon fas fa-info-circle"></i></a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="actionIcon fas fa-trash-alt"></i></a>
+                </td>
+            </tr>
+    }
     </tbody>
 </table>
