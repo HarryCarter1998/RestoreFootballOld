@@ -34,7 +34,6 @@
             cursor: pointer;
         }
 
-/* The search field */
 #playerSearch {
     box-sizing: border-box;
     background-image: url('searchicon.png');
@@ -47,6 +46,14 @@
     background-color: #00482F;
     border-radius: 15px;
 }
+
+@media only screen and (max-width: 800px) {
+    #playerSearch {
+        width: 100%;
+        font-style: italic;
+    }
+}
+
 
     /* The search field when it gets focus/clicked on */
     #playerSearch:focus {

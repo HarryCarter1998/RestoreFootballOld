@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Index";
 }
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
 
 <h1>Index</h1>
 
@@ -13,19 +14,19 @@
     <thead class="primary">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Date)
+                Date
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.GreenScore)
+                Green
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NonBibsScore)
+                Non-Bibs
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.YellowScore)
+                Yellow
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.OrangeScore)
+                Orange
             </th>
             <th></th>
         </tr>
@@ -50,9 +51,9 @@
             </td>
 
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id"><i class="actionIcon fas fa-edit"></i></a> |
+                <a asp-action="Details" asp-route-id="@item.Id"><i class="actionIcon fas fa-info-circle"></i></a> |
+                <a asp-action="Delete" asp-route-id="@item.Id"><i class="actionIcon fas fa-trash-alt"></i></a>
             </td>
         </tr>
 }

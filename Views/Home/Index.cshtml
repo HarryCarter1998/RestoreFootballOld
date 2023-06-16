@@ -11,32 +11,34 @@
 <script src="~/js/results-modal.js"></script>
 
 <div class="text-center">
-    <h1 class="display-4">Restore Football</h1>
-    <div id="add-existing">
-        <p class="text">Enter your name below to sign up for Wednesday</p>
-        <div class="dropdown">
-            <input type="text" placeholder="Enter your name..." id="playerSearch" onkeyup="filterFunction()">
-            <div id="dropdown-content" class="dropdown-content">
-                @{
-                    foreach (var player in ViewBag.RemainingPlayers)
-                    {
-                        <p class="dropdown-element" value=@player.Id onclick="addExistingPlayer(this)">@player.FirstName @player.LastName</p>
+    <div class="bordered-container">
+        <h1 class="display-4">Restore Football</h1>
+        <div id="add-existing">
+            <p class="text">Enter your name below to sign up for Wednesday</p>
+            <div class="dropdown">
+                <input type="text" placeholder="Enter your name..." id="playerSearch" onkeyup="filterFunction()">
+                <div id="dropdown-content" class="dropdown-content">
+                    @{
+                        foreach (var player in ViewBag.RemainingPlayers)
+                        {
+                            <p class="dropdown-element" value=@player.Id onclick="addExistingPlayer(this)">@player.FirstName @player.LastName</p>
+                        }
                     }
-                }
+                </div>
             </div>
+            <p class="subtleLink" onclick="switchForm()">Can't see your name? </p>
         </div>
-        <p class="subtleLink" onclick="switchForm()">Can't see your name? </p>
+        <div id="add-new" class="hide">
+            <input name="FirstName" class="newPlayerInput" type="text" placeholder="First Name" id="firstName">
+            <input name="LastName" class="newPlayerInput" type="text" placeholder="Last Name" id="lastName">
+            <input value="Add" class="addButton" onclick="addNewPlayer()">
+        </div>
+        <div id="success-view" class="hide">
+            <p id="success">Successfully signed up for Wednesday</p>
+            <p class="subtleLink" onclick="resetForm()">Add another?</p>
+        </div>
     </div>
-    <div id="add-new" class="hide">
-        <input name="FirstName" class="newPlayerInput" type="text" placeholder="First Name" id="firstName">
-        <input name="LastName" class="newPlayerInput" type="text" placeholder="Last Name" id="lastName">
-        <input value="Add" class="addButton" onclick="addNewPlayer()">
-    </div>
-    <div id="success-view" class="hide">
-        <p id="success">Successfully signed up for Wednesday</p>
-        <p class="subtleLink" onclick="resetForm()">Add another?</p>
-    </div>
-    <div id="team-section">
+    <div class="bordered-container">
         <h2 class="display-5">Teams as things stand</h2>
         <div class="row">
             <div id="yellow" class="col-sm-2">
