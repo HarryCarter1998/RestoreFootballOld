@@ -102,6 +102,25 @@ function cancelSignUp(playerId) {
         data: { id: playerId},
         success: function () { recalculateTeams() }
     });
+
+    $.ajax({
+        url: '../Players/GetPlayerFromGameweekPlayerId',
+        data: { id: playerId },
+        success: function (player) { addPlayerToDropdown(player) }
+    });
+}
+
+function addPlayerToDropdown(player) {
+    const para = document.createElement("p");
+    const node = document.createTextNode(`${player.firstName} ${player.lastName}`)
+    para.appendChild(node);
+    para.classList.add("dropdown-element");
+    para.setAttribute("value", player.id);
+    para.onclick = function () {
+        console.log(this);
+        addExistingPlayer(this);
+    }
+    document.getElementById("dropdown-content").appendChild(para);
 }
 
 function switchForm() {

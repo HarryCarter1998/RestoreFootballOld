@@ -28,6 +28,12 @@ namespace RestoreFootball.Controllers
             return View(player);
         }
 
+        public Player GetPlayerFromGameweekPlayerId(int id)
+        {
+            var player = _playerService.GetPlayerFromGameweekPlayerId(id);
+            return player;
+        }
+
         // GET: Player/Create
         public IActionResult Create()
         {

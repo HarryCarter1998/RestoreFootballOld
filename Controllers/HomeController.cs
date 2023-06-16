@@ -43,5 +43,10 @@ namespace RestoreFootball.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public int GetNumTeams()
+        {
+            return _gameweekService.GetGameweekPlayers().Count() >= 20 ? 4 : 2;
+        }
     }
 }

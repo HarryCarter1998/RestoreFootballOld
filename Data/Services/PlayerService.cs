@@ -115,5 +115,13 @@ namespace RestoreFootball.Data.Services
             var remainingPlayers = allPlayers.Except(latestGameweekPlayers);
             return remainingPlayers;
         }
+
+        public Player GetPlayerFromGameweekPlayerId(int gameweekPlayerId)
+        {
+            return _context.GameweekPlayer
+                .Include(gp => gp.Player)
+                .FirstOrDefault(gp => gp.Id == gameweekPlayerId)
+                .Player;
+        }
     }
 }

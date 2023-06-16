@@ -31,5 +31,7 @@ namespace RestoreFootball.Data.Services
         void CancelSignUp(int id);
 
         Task<IEnumerable<Player>> GetRemainingPlayers();
+
+        Player GetPlayerFromGameweekPlayerId(int gameweekPlayerId);
     }
 }
