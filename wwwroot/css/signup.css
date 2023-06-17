@@ -1,22 +1,32 @@
 ﻿.newPlayerInput {
-    box-sizing: border-box;
-    background-position: 14px 12px;
-    background-repeat: no-repeat;
     font-size: 24px;
-    padding: 10px 20px 10px 20px;
+    padding: 10px 30px 10px 30px;
     border: none;
-    border-bottom: 1px solid #ddd;
-    position: relative;
+    border-bottom: 1px solid #002208;
+    background-color: #00482F;
+    border-radius: 15px;
+    margin: 5px;
+    color: white;
+    width: 200px;
+}
+
+.newPlayerInput:focus {
+    outline: 2px solid #00340c;
 }
 
 /* Dropdown Button */
 .addButton {
     background-color: #04AA6D;
+    border-radius: 15px;
     color: white;
-    padding: 16px;
-    font-size: 16px;
+    padding: 10px;
+    font-size: 24px;
     border: none;
+    border-bottom: 1px solid #002208;
     cursor: pointer;
+    width: 100px;
+    margin: 5px;
+    text-align: center;
 }
 
 #success {
@@ -35,6 +45,7 @@
     border-radius: 15px;
     margin-right: 10px;
     margin-left: 10px;
+    color: white;
 }
 
 @media only screen and (max-width: 400px) {

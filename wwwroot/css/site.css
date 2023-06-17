@@ -168,3 +168,25 @@ tbody > tr:hover {
     display: none;
 }
 
+h1 {
+    text-align: center;
+}
+
+.create-new {
+    display: block;
+    text-align: center;
+    background-color: #e7e7e7;
+    color: dimgrey;
+    border-radius: 10px;
+    width: 150px;
+    padding: 5px;
+    font-size: 20px;
+    border: 2px solid grey;
+    margin-bottom: 10px;
+}
+
+    .create-new :has(:hover) {
+        color: black;
+    }
+
+
