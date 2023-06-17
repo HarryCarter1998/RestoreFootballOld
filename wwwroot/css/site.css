@@ -141,11 +141,11 @@ tbody > tr:hover {
     background-color: #235836;
 }
 
-@media only screen and (max-width: 800px) {
+/*@media only screen and (max-width: 800px) {
     .bordered-container {
         flex: 1;
     }
-}
+}*/
 
 .container-header-seperator{
     border-bottom: 3px solid #00482F;

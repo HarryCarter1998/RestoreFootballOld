@@ -33,30 +33,3 @@
             background-color: #f1f1f1;
             cursor: pointer;
         }
-
-#playerSearch {
-    box-sizing: border-box;
-    background-image: url('searchicon.png');
-    background-position: 14px 12px;
-    background-repeat: no-repeat;
-    font-size: 24px;
-    padding: 10px 20px 10px 55px;
-    border: none;
-    border-bottom: 1px solid #002208;
-    background-color: #00482F;
-    border-radius: 15px;
-    margin-right: 10px;
-    margin-left : 10px;
-}
-
-@media only screen and (max-width: 800px) {
-    #playerSearch {
-        flex: 1;
-    }
-}
-
-
-    /* The search field when it gets focus/clicked on */
-    #playerSearch:focus {
-        outline: 2px solid #00340c;
-    }
