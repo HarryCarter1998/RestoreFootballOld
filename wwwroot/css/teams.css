@@ -1,0 +1,54 @@
+﻿.teamPlayer {
+    display: block !important;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+    .teamPlayer:hover {
+        text-decoration: line-through;
+    }
+
+
+.row {
+    display: flex;
+    justify-content: center;
+}
+
+#yellow, #orange {
+    display: none;
+}
+
+#yellow, #orange {
+    display: none;
+}
+
+#orange {
+    color: orange;
+}
+
+#yellow {
+    color: yellow;
+}
+
+#green {
+    color: green;
+}
+
+.button {
+    box-sizing: border-box;
+    font-size: 20px;
+    margin: 20px;
+    padding: 10px 20px 10px 20px;
+    border: none;
+    border-bottom: 2px solid #002208;
+    background-color: #00482F;
+    border-radius: 15px;
+    text-align: center;
+    color: lightgray;
+}
+
+    .button:hover {
+        background-color: #006542;
+        color: white;
+    }
