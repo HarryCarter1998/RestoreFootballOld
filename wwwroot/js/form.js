@@ -16,7 +16,7 @@ function createNewPlayer() {
         type: 'POST',
         url: '../Players/Create',
         cache: false,
-        data: { FirstName: firstName, LastName: lastName, SignedUp: true, redirect: false },
+        data: { FirstName: firstName, LastName: lastName, redirect: false, signUp: true },
         success: function () { recalculateTeams() }
     });
 }
