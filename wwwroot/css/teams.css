@@ -32,7 +32,11 @@
 }
 
 #green {
-    color: green;
+    color: lawngreen;
+}
+
+#non-bibs{
+    color: white;
 }
 
 .button {
@@ -52,3 +56,9 @@
         background-color: #006542;
         color: white;
     }
+
+.team-header {
+    font-size: 30px;
+    font-weight: bold;
+    text-decoration: underline;
+}

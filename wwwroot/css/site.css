@@ -134,11 +134,12 @@ tbody > tr:hover {
 }
 
 .bordered-container {
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin: auto;
+    margin-bottom: 5px;
     border: 3px solid #00482F;
     border-radius: 15px;
     background-color: #235836;
+    max-width: 800px;
 }
 
 /*@media only screen and (max-width: 800px) {

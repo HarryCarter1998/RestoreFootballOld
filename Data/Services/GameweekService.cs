@@ -135,17 +135,29 @@ namespace RestoreFootball.Data.Services
 
         private object FindBestTeamsAndRatings(int playerCount, (int TeamNumber, int Rating)[] teamsAndRatings)
         {
+            var numPlayersInEachTeam = teamsAndRatings.OrderBy(t => t.TeamNumber).GroupBy(t => t.TeamNumber).Select(g => g.Count()).ToArray();
+            int numTeams = numPlayersInEachTeam.Count();
+            int minPlayersPerTeam = numPlayersInEachTeam.Min();
+            int numTeamsWithExtraPlayer = teamsAndRatings.Count() % numTeams;
+            int handicap = -10 + (minPlayersPerTeam - 4) * 2 + 1 * (3 - numTeamsWithExtraPlayer);
+
             double bestDiff = 99;
             var bestTeamsAndRatings = new (int TeamNumber, int Rating)[playerCount];
             var maxTries = Math.Pow(playerCount / 2, 3);
+            int[] bestTeamRatings = new int[numTeams];
 
             for (int i = 0; i < maxTries; i++)
             {
                 teamsAndRatings = ((int TeamNumber, int Rating)[])ShuffleTeams(teamsAndRatings);
 
-                var teamRatings = teamsAndRatings.GroupBy(t => t.TeamNumber)
-                  .Select(g => g.Sum(t => t.Rating))
-                  .ToArray();
+                var teamRatings = teamsAndRatings
+                    .OrderBy(t => t.TeamNumber)
+                    .GroupBy(t => t.TeamNumber)
+                    .Select(g => g.Sum(t => t.Rating))
+                    .ToArray();
+
+                if(numTeamsWithExtraPlayer > 0)
+                    teamRatings = AdjustHandicap(teamRatings, numPlayersInEachTeam, handicap);
 
                 var diff = (teamRatings.Max() - teamRatings.Min()) / teamRatings.Average();
 
@@ -153,16 +165,32 @@ namespace RestoreFootball.Data.Services
                 {
                     bestDiff = diff;
                     bestTeamsAndRatings = teamsAndRatings.ToArray();
+                    bestTeamRatings = teamRatings;
                 }
 
-                //Debug.WriteLine($"i: {i}, bestDiff: {bestDiff}");
                 if (bestDiff < 0.01 || (bestDiff < 0.05 && i > 500)) { break; }
             }
 
-            //Debug.WriteLine(string.Join(", ", bestTeamsAndRatings));
-            //Debug.WriteLine($"{Math.Round(bestDiff*100, 2)}% difference");
+            for (int i = 0; i < numTeams; i++)
+                if (numPlayersInEachTeam[i] == minPlayersPerTeam && numTeamsWithExtraPlayer > 0)
+                {
+                    Debug.WriteLine($"Team {((Team)i)}: {bestTeamRatings[i] - handicap} with handicap {handicap} = {bestTeamRatings[i]}");
+                }
+                else
+                {
+                    Debug.WriteLine($"Team {((Team)i)}: {bestTeamRatings[i]} with no handicap");
+                }
 
             return bestTeamsAndRatings;
+        }
+
+        private static int[] AdjustHandicap(int[] teamRatings, int[] numPlayersInEachTeam, int handicap)
+        {
+            for(int i = 0; i < numPlayersInEachTeam.Count(); i++)
+                if (numPlayersInEachTeam[i] == numPlayersInEachTeam.Min())
+                    teamRatings[i] += handicap;
+
+            return teamRatings;
         }
 
         private async Task AssignTeams(ICollection<GameweekPlayer> gameweekPlayers, (int TeamNumber, int Rating)[] bestTeamsAndRatings)
