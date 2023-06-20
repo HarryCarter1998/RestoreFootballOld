@@ -238,7 +238,7 @@ namespace RestoreFootball.Data.Services
 
             foreach (SameTeamRule sameTeamRule in _sameTeamRules)
             {
-                var playersToBeInSameTeam = _sameTeamRules.SelectMany(str => str.GameweekPlayers.Select(gp => gp.Id)).ToList();
+                List<int> playersToBeInSameTeam = sameTeamRule.GameweekPlayers.Select(gp => gp.Id).ToList();
 
                 var numOfDiffTeams = playerInfos.Where(pi => playersToBeInSameTeam.Contains(pi.GameweekPlayerId)).Select(pi => pi.Team).Distinct().Count();
 
