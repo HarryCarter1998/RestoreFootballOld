@@ -94,22 +94,6 @@ function addTeamPlayerElement(gameweekPlayer, teams) {
     document.getElementById(team).appendChild(para);
 }
 
-function cancelSignUp(playerId) {
-    $.ajax({
-        type: 'POST',
-        url: '../Players/CancelSignUp',
-        cache: false,
-        data: { id: playerId},
-        success: function () { recalculateTeams() }
-    });
-
-    $.ajax({
-        url: '../Players/GetPlayerFromGameweekPlayerId',
-        data: { id: playerId },
-        success: function (player) { addPlayerToDropdown(player) }
-    });
-}
-
 function addPlayerToDropdown(player) {
     const para = document.createElement("p");
     const node = document.createTextNode(`${player.firstName} ${player.lastName}`)

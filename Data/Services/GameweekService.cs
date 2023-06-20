@@ -8,6 +8,7 @@ namespace RestoreFootball.Data.Services
     public class GameweekService : IGameweekService
     {
         private readonly RestoreFootballContext _context;
+        private ICollection<SameTeamRule> _sameTeamRules = new List<SameTeamRule>();
 
         public GameweekService(RestoreFootballContext context)
         {
@@ -106,34 +107,43 @@ namespace RestoreFootball.Data.Services
         {
             var gameweekPlayers = GetGameweekPlayers();
 
+            _sameTeamRules = GetLatestGameweek().Result.SameTeamRules;
+
             if (!gameweekPlayers.Any()) { return gameweekPlayers; }
 
             var players = gameweekPlayers.Select(gp => gp.Player).ToList();
 
-            var teamsAndRatings = ((int TeamNumber, int Rating)[])CreateTeamsAndRatings(players);
+            var playerInfos = gameweekPlayers.Select(gp => new PlayerInfo
+            {
+                PlayerId = players.FirstOrDefault(p => p.Id == gp.Player.Id) ?.Id ?? 0,
+                Rating = players.FirstOrDefault(p => p.Id == gp.Player.Id)?.Rating ?? 0,
+                TeamNumber = (int)gp.Team
+            }).ToArray();
 
-            var bestTeamsAndRatings = ((int TeamNumber, int Rating)[])FindBestTeamsAndRatings(players.Count, teamsAndRatings);
+            var teamsAndRatings = CreateTeamsAndRatings(playerInfos);
+
+            var bestTeamsAndRatings = FindBestTeamsAndRatings(gameweekPlayers.Count, teamsAndRatings);
 
             await AssignTeams(gameweekPlayers, bestTeamsAndRatings);
 
             return gameweekPlayers;
         }
 
-        private object CreateTeamsAndRatings(ICollection<Player> players)
+        private PlayerInfo[] CreateTeamsAndRatings(ICollection<PlayerInfo> players)
         {
             var numTeams = players.Count >= 20 ? 4 : 2;
 
-            var teamsAndRatings = new (int TeamNumber, int Rating)[players.Count];
+            var teamsAndRatings = new PlayerInfo[players.Count()];
 
-            for (int i = 0; i < teamsAndRatings.Length; i++)
+            for (int i = 0; i < teamsAndRatings.Count(); i++)
             {
-                teamsAndRatings[i] = (i % numTeams, players.ElementAt(i).Rating);
+                teamsAndRatings[i] = new PlayerInfo { PlayerId = players.ElementAt(i).PlayerId, Rating = players.ElementAt(i).Rating, TeamNumber = i % numTeams };
             }
 
             return teamsAndRatings;
         }
 
-        private object FindBestTeamsAndRatings(int playerCount, (int TeamNumber, int Rating)[] teamsAndRatings)
+        private PlayerInfo[] FindBestTeamsAndRatings(int playerCount, PlayerInfo[] teamsAndRatings)
         {
             var numPlayersInEachTeam = teamsAndRatings.OrderBy(t => t.TeamNumber).GroupBy(t => t.TeamNumber).Select(g => g.Count()).ToArray();
             int numTeams = numPlayersInEachTeam.Count();
@@ -142,13 +152,13 @@ namespace RestoreFootball.Data.Services
             int handicap = -10 + (minPlayersPerTeam - 4) * 2 + 1 * (3 - numTeamsWithExtraPlayer);
 
             double bestDiff = 99;
-            var bestTeamsAndRatings = new (int TeamNumber, int Rating)[playerCount];
+            var bestTeamsAndRatings = new PlayerInfo[playerCount];
             var maxTries = Math.Pow(playerCount / 2, 3);
             int[] bestTeamRatings = new int[numTeams];
 
             for (int i = 0; i < maxTries; i++)
             {
-                teamsAndRatings = ((int TeamNumber, int Rating)[])ShuffleTeams(teamsAndRatings);
+                teamsAndRatings = ShuffleTeams(teamsAndRatings);
 
                 var teamRatings = teamsAndRatings
                     .OrderBy(t => t.TeamNumber)
@@ -193,7 +203,7 @@ namespace RestoreFootball.Data.Services
             return teamRatings;
         }
 
-        private async Task AssignTeams(ICollection<GameweekPlayer> gameweekPlayers, (int TeamNumber, int Rating)[] bestTeamsAndRatings)
+        private async Task AssignTeams(ICollection<GameweekPlayer> gameweekPlayers, PlayerInfo[] bestTeamsAndRatings)
         {
             for (int l = 0; l < gameweekPlayers.Count; l++)
             {
@@ -203,7 +213,7 @@ namespace RestoreFootball.Data.Services
             await _context.SaveChangesAsync();
         }
 
-        private object ShuffleTeams((int TeamNumber, int Rating)[] teamsAndRatings)
+        private PlayerInfo[] ShuffleTeams(PlayerInfo[] teamsAndRatings)
         {
             int n = teamsAndRatings.Length;
             while (n > 1)
@@ -214,7 +224,26 @@ namespace RestoreFootball.Data.Services
                 teamsAndRatings[k].TeamNumber = teamsAndRatings[n].TeamNumber;
                 teamsAndRatings[n].TeamNumber = value;
             }
+            if(_sameTeamRules.Any())
+                if (!GameweekFollowsSameTeamRules(teamsAndRatings))
+                    ShuffleTeams(teamsAndRatings); 
+
             return teamsAndRatings;
+        }
+
+        private bool GameweekFollowsSameTeamRules(PlayerInfo[] playerInfos)
+        {
+
+            foreach (SameTeamRule sameTeamRule in _sameTeamRules)
+            {
+                var playersToBeInSameTeam = _sameTeamRules.SelectMany(str => str.GameweekPlayers.Select(gp => gp.Id)).ToList();
+
+                var numOfDiffTeams = playerInfos.Where(pi => playersToBeInSameTeam.Contains(pi.PlayerId)).Select(pi => pi.TeamNumber).Distinct().Count();
+
+                if (numOfDiffTeams > 1) { return false; }
+            }
+
+            return true;
         }
     }
 }
