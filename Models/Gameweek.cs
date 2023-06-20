@@ -13,6 +13,7 @@ namespace RestoreFootball.Models
 
         [JsonIgnore]
         public virtual ICollection<GameweekPlayer>? GameweekPlayers { get; set; } = new List<GameweekPlayer>();
+        [JsonIgnore]
         public virtual ICollection<SameTeamRule>? SameTeamRules { get; set; } = new List<SameTeamRule>();
     }
 }

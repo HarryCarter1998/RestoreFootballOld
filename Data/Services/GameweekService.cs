@@ -62,6 +62,8 @@ namespace RestoreFootball.Data.Services
                 .OrderByDescending(g => g.Date)
                 .Include(g => g.GameweekPlayers)
                     .ThenInclude(gp => gp.Player)
+                .Include(g => g.SameTeamRules)
+                    .ThenInclude(str => str.GameweekPlayers)
                 .FirstOrDefaultAsync();
         }
 
@@ -115,9 +117,9 @@ namespace RestoreFootball.Data.Services
 
             var playerInfos = gameweekPlayers.Select(gp => new PlayerInfo
             {
-                PlayerId = players.FirstOrDefault(p => p.Id == gp.Player.Id) ?.Id ?? 0,
+                GameweekPlayerId = gp.Id,
                 Rating = players.FirstOrDefault(p => p.Id == gp.Player.Id)?.Rating ?? 0,
-                TeamNumber = (int)gp.Team
+                Team = gp.Team
             }).ToArray();
 
             var teamsAndRatings = CreateTeamsAndRatings(playerInfos);
@@ -137,7 +139,7 @@ namespace RestoreFootball.Data.Services
 
             for (int i = 0; i < teamsAndRatings.Count(); i++)
             {
-                teamsAndRatings[i] = new PlayerInfo { PlayerId = players.ElementAt(i).PlayerId, Rating = players.ElementAt(i).Rating, TeamNumber = i % numTeams };
+                teamsAndRatings[i] = new PlayerInfo { GameweekPlayerId = players.ElementAt(i).GameweekPlayerId, Rating = players.ElementAt(i).Rating, Team = (Team)(i % numTeams) };
             }
 
             return teamsAndRatings;
@@ -145,7 +147,7 @@ namespace RestoreFootball.Data.Services
 
         private PlayerInfo[] FindBestTeamsAndRatings(int playerCount, PlayerInfo[] teamsAndRatings)
         {
-            var numPlayersInEachTeam = teamsAndRatings.OrderBy(t => t.TeamNumber).GroupBy(t => t.TeamNumber).Select(g => g.Count()).ToArray();
+            var numPlayersInEachTeam = teamsAndRatings.OrderBy(t => t.Team).GroupBy(t => t.Team).Select(g => g.Count()).ToArray();
             int numTeams = numPlayersInEachTeam.Count();
             int minPlayersPerTeam = numPlayersInEachTeam.Min();
             int numTeamsWithExtraPlayer = teamsAndRatings.Count() % numTeams;
@@ -161,8 +163,8 @@ namespace RestoreFootball.Data.Services
                 teamsAndRatings = ShuffleTeams(teamsAndRatings);
 
                 var teamRatings = teamsAndRatings
-                    .OrderBy(t => t.TeamNumber)
-                    .GroupBy(t => t.TeamNumber)
+                    .OrderBy(t => t.Team)
+                    .GroupBy(t => t.Team)
                     .Select(g => g.Sum(t => t.Rating))
                     .ToArray();
 
@@ -207,7 +209,7 @@ namespace RestoreFootball.Data.Services
         {
             for (int l = 0; l < gameweekPlayers.Count; l++)
             {
-                gameweekPlayers.ElementAt(l).Team = (Team)bestTeamsAndRatings[l].TeamNumber;
+                gameweekPlayers.ElementAt(l).Team = (Team)bestTeamsAndRatings[l].Team;
             }
 
             await _context.SaveChangesAsync();
@@ -220,9 +222,9 @@ namespace RestoreFootball.Data.Services
             {
                 n--;
                 int k = new Random().Next(n + 1);
-                int value = teamsAndRatings[k].TeamNumber;
-                teamsAndRatings[k].TeamNumber = teamsAndRatings[n].TeamNumber;
-                teamsAndRatings[n].TeamNumber = value;
+                Team value = teamsAndRatings[k].Team;
+                teamsAndRatings[k].Team = teamsAndRatings[n].Team;
+                teamsAndRatings[n].Team = value;
             }
             if(_sameTeamRules.Any())
                 if (!GameweekFollowsSameTeamRules(teamsAndRatings))
@@ -238,7 +240,7 @@ namespace RestoreFootball.Data.Services
             {
                 var playersToBeInSameTeam = _sameTeamRules.SelectMany(str => str.GameweekPlayers.Select(gp => gp.Id)).ToList();
 
-                var numOfDiffTeams = playerInfos.Where(pi => playersToBeInSameTeam.Contains(pi.PlayerId)).Select(pi => pi.TeamNumber).Distinct().Count();
+                var numOfDiffTeams = playerInfos.Where(pi => playersToBeInSameTeam.Contains(pi.GameweekPlayerId)).Select(pi => pi.Team).Distinct().Count();
 
                 if (numOfDiffTeams > 1) { return false; }
             }
