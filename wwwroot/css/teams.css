@@ -62,3 +62,28 @@
     font-weight: bold;
     text-decoration: underline;
 }
+
+#loading {
+    z-index: 9999;
+    display: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    margin: 50px;
+}
+
+.spinner {
+    margin: auto;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border-top: 5px solid #3498db;
+    border-right: 5px solid transparent;
+    animation: spin .5s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
