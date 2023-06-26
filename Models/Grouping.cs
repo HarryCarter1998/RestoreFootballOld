@@ -1,6 +1,6 @@
 ﻿namespace RestoreFootball.Models
 {
-    public class SameTeamRule
+    public class Grouping
     {
         public int Id { get; set; }
         public ICollection<GameweekPlayer> GameweekPlayers { get; set; } = new List<GameweekPlayer>();

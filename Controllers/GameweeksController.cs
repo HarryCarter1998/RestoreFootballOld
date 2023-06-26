@@ -39,6 +39,7 @@ namespace RestoreFootball.Controllers
             }
 
             var gameweek = await _context.Gameweek
+                .Include(g => g.Groupings)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (gameweek == null)
             {
@@ -78,7 +79,8 @@ namespace RestoreFootball.Controllers
                 return NotFound();
             }
 
-            var gameweek = await _context.Gameweek.FindAsync(id);
+            var gameweek = await _context.Gameweek.Include(g => g.Groupings).ThenInclude(gr => gr.GameweekPlayers).ThenInclude(gr => gr.Player).FirstOrDefaultAsync(g => g.Id == id);
+
             if (gameweek == null)
             {
                 return NotFound();

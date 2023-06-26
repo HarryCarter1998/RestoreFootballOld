@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RestoreFootball.Data;
 
@@ -11,9 +12,11 @@ using RestoreFootball.Data;
 namespace RestoreFootball.Migrations
 {
     [DbContext(typeof(RestoreFootballContext))]
-    partial class RestoreFootballContextModelSnapshot : ModelSnapshot
+    [Migration("20230626175326_Renamed to grouping")]
+    partial class Renamedtogrouping
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

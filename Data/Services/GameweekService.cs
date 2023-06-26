@@ -8,7 +8,7 @@ namespace RestoreFootball.Data.Services
     public class GameweekService : IGameweekService
     {
         private readonly RestoreFootballContext _context;
-        private ICollection<SameTeamRule> _sameTeamRules = new List<SameTeamRule>();
+        private ICollection<Grouping> _groupings = new List<Grouping>();
 
         public GameweekService(RestoreFootballContext context)
         {
@@ -62,7 +62,7 @@ namespace RestoreFootball.Data.Services
                 .OrderByDescending(g => g.Date)
                 .Include(g => g.GameweekPlayers)
                     .ThenInclude(gp => gp.Player)
-                .Include(g => g.SameTeamRules)
+                .Include(g => g.Groupings)
                     .ThenInclude(str => str.GameweekPlayers)
                 .FirstOrDefaultAsync();
         }
@@ -109,7 +109,7 @@ namespace RestoreFootball.Data.Services
         {
             var gameweekPlayers = GetGameweekPlayers();
 
-            _sameTeamRules = GetLatestGameweek().Result.SameTeamRules;
+            _groupings = GetLatestGameweek().Result.Groupings;
 
             if (!gameweekPlayers.Any()) { return gameweekPlayers; }
 
@@ -151,7 +151,8 @@ namespace RestoreFootball.Data.Services
             int numTeams = numPlayersInEachTeam.Count();
             int minPlayersPerTeam = numPlayersInEachTeam.Min();
             int numTeamsWithExtraPlayer = teamsAndRatings.Count() % numTeams;
-            int handicap = -10 + (minPlayersPerTeam - 4) * 2 + 1 * (3 - numTeamsWithExtraPlayer);
+            int handicap = -50 + 10*(minPlayersPerTeam - 4) + 5*(3 - numTeamsWithExtraPlayer);
+            handicap = -100;
 
             double bestDiff = 99;
             var bestTeamsAndRatings = new PlayerInfo[playerCount];
@@ -209,7 +210,7 @@ namespace RestoreFootball.Data.Services
         {
             for (int l = 0; l < gameweekPlayers.Count; l++)
             {
-                gameweekPlayers.ElementAt(l).Team = (Team)bestTeamsAndRatings[l].Team;
+                gameweekPlayers.ElementAt(l).Team = bestTeamsAndRatings[l].Team;
             }
 
             await _context.SaveChangesAsync();
@@ -226,21 +227,21 @@ namespace RestoreFootball.Data.Services
                 teamsAndRatings[k].Team = teamsAndRatings[n].Team;
                 teamsAndRatings[n].Team = value;
             }
-            if(_sameTeamRules.Any())
-                if (!GameweekFollowsSameTeamRules(teamsAndRatings))
+            if(_groupings.Any())
+                if (!TeamsObeyGroupings(teamsAndRatings))
                     ShuffleTeams(teamsAndRatings); 
 
             return teamsAndRatings;
         }
 
-        private bool GameweekFollowsSameTeamRules(PlayerInfo[] playerInfos)
+        private bool TeamsObeyGroupings(PlayerInfo[] playerInfos)
         {
 
-            foreach (SameTeamRule sameTeamRule in _sameTeamRules)
+            foreach (Grouping grouping in _groupings)
             {
-                List<int> playersToBeInSameTeam = sameTeamRule.GameweekPlayers.Select(gp => gp.Id).ToList();
+                List<int> groupedPlayers = grouping.GameweekPlayers.Select(gp => gp.Id).ToList();
 
-                var numOfDiffTeams = playerInfos.Where(pi => playersToBeInSameTeam.Contains(pi.GameweekPlayerId)).Select(pi => pi.Team).Distinct().Count();
+                var numOfDiffTeams = playerInfos.Where(pi => groupedPlayers.Contains(pi.GameweekPlayerId)).Select(pi => pi.Team).Distinct().Count();
 
                 if (numOfDiffTeams > 1) { return false; }
             }

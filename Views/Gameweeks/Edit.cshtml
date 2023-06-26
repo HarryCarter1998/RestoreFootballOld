@@ -3,42 +3,45 @@
 @{
     ViewData["Title"] = "Edit";
 }
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+<link href="~/css/signup.css" rel="stylesheet" />
+<script src="~/js/gameweek.js"></script>
 
 <h1>Edit</h1>
 
 <h4>Gameweek</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="GreenScore" class="control-label"></label>
-                <input asp-for="GreenScore" class="form-control" />
-                <span asp-validation-for="GreenScore" class="text-danger"></span>
+<form class="bordered-container">
+    <label for="GreenScore">Green Score:</label>
+    <input type="number" id="GreenScore" name="GreenScore"><br><br>
+
+    <label for="NonBibsScore">NonBibs Score:</label>
+    <input type="number" id="NonBibsScore" name="NonBibsScore"><br><br>
+
+    <label for="YellowScore">Yellow Score:</label>
+    <input type="number" id="YellowScore" name="YellowScore"><br><br>
+
+    <label for="OrangeScore">Orange Score:</label>
+    <input type="number" id="OrangeScore" name="OrangeScore"><br><br>
+
+    <label for="dropdown">Groupings:</label>
+
+    <div id="groupings">
+        @foreach (var grouping in Model.Groupings)
+        {
+            <div class="grouping bordered-container">
+                @foreach(var gameweekPlayer in grouping.GameweekPlayers)
+                {
+                    <p>@gameweekPlayer.Player.FirstName @gameweekPlayer.Player.LastName</p>
+                    <button><i class="actionIcon fas fa-trash-alt"></i></button>
+                }
             </div>
-            <div class="form-group">
-                <label asp-for="NonBibsScore" class="control-label"></label>
-                <input asp-for="NonBibsScore" class="form-control" />
-                <span asp-validation-for="NonBibsScore" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="YellowScore" class="control-label"></label>
-                <input asp-for="YellowScore" class="form-control" />
-                <span asp-validation-for="YellowScore" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="OrangeScore" class="control-label"></label>
-                <input asp-for="OrangeScore" class="form-control" />
-                <span asp-validation-for="OrangeScore" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        }
+        <button onclick="addGrouping()">Add Grouping</button>
     </div>
-</div>
+
+</form>
+
 
 <div>
     <a asp-action="Index">Back to List</a>
