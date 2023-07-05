@@ -5,6 +5,8 @@
 }
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
 <link href="~/css/signup.css" rel="stylesheet" />
+<link href="~/css/dropdown.css" rel="stylesheet" />
+<script src="~/js/dropdown.js"></script>
 <script src="~/js/gameweek.js"></script>
 
 <h1>Edit</h1>
@@ -29,15 +31,27 @@
     <div id="groupings">
         @foreach (var grouping in Model.Groupings)
         {
+            <div class="dropdown">
+                <input type="text" placeholder="Enter player name..." class="playerSearch" id="playerSearch-@grouping.Id" onkeyup="filterFunction(this.id, 'dropdown-content-@grouping.Id')">
+                <p onclick="location.href='@Url.Action("DeleteGrouping", "Gameweeks", new { groupingId = grouping.Id, gameweekId = Model.Id })'">Delete Grouping</p>
+                <div id="dropdown-content-@grouping.Id" class="dropdown-content">
+                    @{
+                        @foreach (var gameweekPlayer in ViewBag.UngroupedGameweekPlayers)
+                        {
+                            <p class="dropdown-element" onclick="location.href='@Url.Action("AddToGrouping", "Gameweeks", new { groupingId = grouping.Id, gameweekPlayerId = gameweekPlayer.GameweekPlayer.Id, gameweekId = Model.Id })'">@gameweekPlayer.Player.FirstName @gameweekPlayer.Player.LastName</p>
+                        }
+
+                    }
+                </div>
+            </div>
             <div class="grouping bordered-container">
                 @foreach(var gameweekPlayer in grouping.GameweekPlayers)
                 {
-                    <p>@gameweekPlayer.Player.FirstName @gameweekPlayer.Player.LastName</p>
-                    <button><i class="actionIcon fas fa-trash-alt"></i></button>
+                    <p class="groupedPlayer" onclick="location.href='@Url.Action("RemoveFromGrouping", "Gameweeks", new { groupingId = grouping.Id, gameweekPlayerId = gameweekPlayer.Id, gameweekId = Model.Id })'">@gameweekPlayer.Player.FirstName @gameweekPlayer.Player.LastName</p>
                 }
             </div>
         }
-        <button onclick="addGrouping()">Add Grouping</button>
+        <p onclick="location.href='@Url.Action("CreateGrouping", "Gameweeks", new { gameweekId = Model.Id })'">Add Grouping</p>
     </div>
 
 </form>

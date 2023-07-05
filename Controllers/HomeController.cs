@@ -22,13 +22,13 @@ namespace RestoreFootball.Controllers
         public async Task<IActionResult> IndexAsync()
         {
             ViewBag.RemainingPlayers = await _playerService.GetRemainingPlayers();
-            ViewBag.NumTeams = _gameweekService.GetGameweekPlayers().Count() >= 20 ? 4 : 2;
+            ViewBag.NumTeams = _gameweekService.GetLatestGameweekPlayers().Count() >= 20 ? 4 : 2;
             return View();
         }
 
         public IActionResult GetGameweekPlayers()
         {
-            return Json(_gameweekService.GetGameweekPlayers());
+            return Json(_gameweekService.GetLatestGameweekPlayers());
         }
 
         public IActionResult RecalculateTeams()
@@ -46,7 +46,7 @@ namespace RestoreFootball.Controllers
 
         public int GetNumTeams()
         {
-            return _gameweekService.GetGameweekPlayers().Count() >= 20 ? 4 : 2;
+            return _gameweekService.GetLatestGameweekPlayers().Count() >= 20 ? 4 : 2;
         }
     }
 }

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using RestoreFootball.Data;
 using RestoreFootball.Data.Services;
 using RestoreFootball.Models;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace RestoreFootball.Controllers
 {
@@ -74,19 +75,36 @@ namespace RestoreFootball.Controllers
         // GET: Gameweeks/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+
             if (id == null || _context.Gameweek == null)
             {
                 return NotFound();
             }
 
-            var gameweek = await _context.Gameweek.Include(g => g.Groupings).ThenInclude(gr => gr.GameweekPlayers).ThenInclude(gr => gr.Player).FirstOrDefaultAsync(g => g.Id == id);
+            var gameweek = await _context.Gameweek
+                .Include(g => g.GameweekPlayers)
+                    .ThenInclude(gp => gp.Player)
+                .Include(g => g.Groupings)
+                    .ThenInclude(gr => gr.GameweekPlayers)
+                        .ThenInclude(gr => gr.Player)
+                .FirstOrDefaultAsync(g => g.Id == id);
 
             if (gameweek == null)
             {
                 return NotFound();
             }
+
+            ViewBag.UngroupedGameweekPlayers = gameweek.GameweekPlayers
+                .Where(gp => gp.GroupingId == null)
+                .Select(gp => new {
+                    GameweekPlayer = gp,
+                    gp.Player
+                })
+                .ToList();
+
             return View(gameweek);
         }
+
 
         // POST: Gameweeks/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -166,6 +184,88 @@ namespace RestoreFootball.Controllers
         private bool GameweekExists(int id)
         {
           return (_context.Gameweek?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        //in the GameweeksController
+        public IActionResult AddToGrouping(int groupingId, int gameweekPlayerId, int gameweekId)
+        {            
+            var gameweek = _context.Gameweek.Include(g => g.GameweekPlayers).Include(g => g.Groupings).SingleOrDefault(g => g.Id == gameweekId);
+
+            var gameweekPlayer = gameweek?.GameweekPlayers.FirstOrDefault(gp => gp.Id == gameweekPlayerId);
+
+            var grouping = gameweek?.Groupings.FirstOrDefault(g => g.Id == groupingId);
+
+            if (gameweekPlayer == null || grouping == null)
+            {
+                return NotFound();
+            }
+
+            grouping.GameweekPlayers.Add(gameweekPlayer);
+
+            _gameweekService.RecalculateTeams();
+            return RedirectToAction(nameof(Edit), new { id = gameweekId });
+        }
+
+        //in the GameweeksController
+        public IActionResult RemoveFromGrouping(int groupingId, int gameweekPlayerId, int gameweekId)
+        {
+            var gameweek = _context.Gameweek.Include(g => g.GameweekPlayers).Include(g => g.Groupings).SingleOrDefault(g => g.Id == gameweekId);
+
+            var gameweekPlayer = gameweek?.GameweekPlayers.FirstOrDefault(gp => gp.Id == gameweekPlayerId);
+
+            var grouping = gameweek?.Groupings.FirstOrDefault(g => g.Id == groupingId);
+
+            if (gameweekPlayer == null || grouping == null)
+            {
+                return NotFound();
+            }
+
+            grouping.GameweekPlayers.Remove(gameweekPlayer);
+
+            _gameweekService.RecalculateTeams();
+
+            return RedirectToAction(nameof(Edit), new { id = gameweekId });
+        }
+
+        public IActionResult CreateGrouping(int gameweekId)
+        {
+            var gameweek = _context.Gameweek.Include(g => g.Groupings).SingleOrDefault(g => g.Id == gameweekId);
+            if (gameweek == null)
+            {
+                return NotFound();
+            }
+
+            var grouping = new Grouping();
+            gameweek?.Groupings.Add(grouping);
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Edit), new { id = gameweekId });
+        }
+
+        public async Task<IActionResult> DeleteGrouping(int groupingId, int gameweekId)
+        {
+            var grouping = await _context.Grouping.Include(gw => gw.GameweekPlayers).FirstOrDefaultAsync(gw => gw.Id == groupingId);
+            if (grouping == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                foreach (var gameweekPlayer in grouping.GameweekPlayers)
+                {
+                    gameweekPlayer.GroupingId = null;
+                }
+                _context.Grouping.Remove(grouping);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            await _gameweekService.RecalculateTeams();
+
+            return RedirectToAction(nameof(Edit), new { id = gameweekId });
         }
     }
 }

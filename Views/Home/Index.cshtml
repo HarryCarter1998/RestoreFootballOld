@@ -18,7 +18,7 @@
         <div id="add-existing">
             <p class="text">Enter your name below to sign up for Wednesday</p>
             <div class="dropdown">
-                <input type="text" placeholder="Enter your name..." id="playerSearch" onkeyup="filterFunction()">
+                <input type="text" placeholder="Enter your name..." class="playerSearch" id="playerSearch" onkeyup="filterFunction()">
                 <div id="dropdown-content" class="dropdown-content">
                     @{
                         foreach (var player in ViewBag.RemainingPlayers)

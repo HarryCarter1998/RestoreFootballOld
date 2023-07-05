@@ -10,8 +10,10 @@ namespace RestoreFootball.Data.Services
 
         public Task<Gameweek> GetLatestGameweek();
 
-        public ICollection<GameweekPlayer> GetGameweekPlayers();
+        public ICollection<GameweekPlayer> GetLatestGameweekPlayers();
 
         public Task<IEnumerable<GameweekPlayer>> RecalculateTeams();
+
+        public ICollection<GameweekPlayer> GetUngroupedGameweekPlayers(int id);
     }
 }

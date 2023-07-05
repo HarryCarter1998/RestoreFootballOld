@@ -1,9 +1,9 @@
-﻿function filterFunction() {
+﻿function filterFunction(playerSearchId = "playerSearch", dropdownContentId = "dropdown-content") {
     var input, filter, ul, li, a, i;
-    input = document.getElementById("playerSearch");
+    input = document.getElementById(playerSearchId);
     filter = input.value.toUpperCase();
-    dropdownContent = document.getElementById("dropdown-content");
-    showDropdown(dropdownContent);
+    dropdownContent = document.getElementById(dropdownContentId);
+    showDropdown(dropdownContent, filter);
 
     dropdownElements = dropdownContent.getElementsByClassName("dropdown-element");
     for (i = 0; i < dropdownElements.length; i++) {
@@ -16,10 +16,8 @@
     }
 }
 
-function showDropdown(dropdownContent) {
-    var input = document.querySelector('.dropdown input');
-
-    if (input.value.length > 0) {
+function showDropdown(dropdownContent, input) {
+    if (input.length > 0) {
         dropdownContent.style.display = 'block';
     } else {
         dropdownContent.style.display = 'none';

@@ -15,5 +15,7 @@ namespace RestoreFootball.Data
         public DbSet<Gameweek> Gameweek { get; set; } = default!;
 
         public DbSet<GameweekPlayer> GameweekPlayer { get; set; } = default!;
+
+        public DbSet<Grouping> Grouping { get; set; } = default!;
     }
 }

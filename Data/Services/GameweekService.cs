@@ -49,7 +49,7 @@ namespace RestoreFootball.Data.Services
 
             _context.Update(dbGameweek);
 
-            AdjustPlayerRatings(dbGameweek);
+            //AdjustPlayerRatings(dbGameweek);
 
             await _context.SaveChangesAsync();
 
@@ -98,7 +98,18 @@ namespace RestoreFootball.Data.Services
                 .ForEach(p => p.Rating--);
         }
 
-        public ICollection<GameweekPlayer> GetGameweekPlayers()
+        public ICollection<GameweekPlayer> GetUngroupedGameweekPlayers(int id)
+        {
+            return _context.Gameweek
+                .Include(g => g.GameweekPlayers)
+                    .ThenInclude(gp => gp.Player)
+                .Where(g => g.Id == id)
+                .SelectMany(g => g.GameweekPlayers)
+                .ToList();
+        }
+
+
+        public ICollection<GameweekPlayer> GetLatestGameweekPlayers()
         {
             var latestGameweek = GetLatestGameweek().Result;
             return latestGameweek.GameweekPlayers;
@@ -107,7 +118,7 @@ namespace RestoreFootball.Data.Services
 
         public async Task<IEnumerable<GameweekPlayer>> RecalculateTeams()
         {
-            var gameweekPlayers = GetGameweekPlayers();
+            var gameweekPlayers = GetLatestGameweekPlayers();
 
             _groupings = GetLatestGameweek().Result.Groupings;
 

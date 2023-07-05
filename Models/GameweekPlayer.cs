@@ -6,6 +6,7 @@ namespace RestoreFootball.Models
     {
         public int Id { get; set; }
         public Team Team { get; set; }
+        public int? GroupingId { get; set; }
 
         [JsonPropertyName("player")]
         public virtual required Player Player { get; set; }
