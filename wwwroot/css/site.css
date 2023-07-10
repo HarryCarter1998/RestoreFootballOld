@@ -97,6 +97,7 @@ tbody > tr:hover {
     padding-top: 10px;
     color: gray;
     text-decoration: underline;
+    font-size: 18px;
 }
 
     .subtleLink:hover {
@@ -125,6 +126,7 @@ tbody > tr:hover {
 
 .text {
     color: darkgray;
+    font-size: 18px;
 }
 
 .col-sm-2 {

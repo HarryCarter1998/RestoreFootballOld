@@ -8,23 +8,26 @@
 <link href="~/css/dropdown.css" rel="stylesheet" />
 <script src="~/js/dropdown.js"></script>
 <script src="~/js/gameweek.js"></script>
+<script src="~/js/teams.js"></script>
+<link href="~/css/gameweeks.css" rel="stylesheet" />
+<link href="~/css/teams.css" rel="stylesheet" />
 
 <h1>Edit</h1>
 
 <h4>Gameweek</h4>
 <hr />
-<form class="bordered-container">
+<form class="bordered-container" id="edit-content">
     <label for="GreenScore">Green Score:</label>
-    <input type="number" id="GreenScore" name="GreenScore"><br><br>
+    <p type="number" id="GreenScore" name="GreenScore"><br><br>
 
     <label for="NonBibsScore">NonBibs Score:</label>
-    <input type="number" id="NonBibsScore" name="NonBibsScore"><br><br>
+    <p type="number" id="NonBibsScore" name="NonBibsScore"><br><br>
 
     <label for="YellowScore">Yellow Score:</label>
-    <input type="number" id="YellowScore" name="YellowScore"><br><br>
+    <p type="number" id="YellowScore" name="YellowScore"><br><br>
 
     <label for="OrangeScore">Orange Score:</label>
-    <input type="number" id="OrangeScore" name="OrangeScore"><br><br>
+    <p type="number" id="OrangeScore" name="OrangeScore"><br><br>
 
     <label for="dropdown">Groupings:</label>
 
@@ -53,8 +56,29 @@
         }
         <p onclick="location.href='@Url.Action("CreateGrouping", "Gameweeks", new { gameweekId = Model.Id })'">Add Grouping</p>
     </div>
-
 </form>
+
+<div class="bordered-container">
+    <h1 class="display-5">Teams</h1>
+    <div id="teams" class="row">
+        <div id="yellow" class="col-sm-2">
+            <h3 class="team-header">Yellows</h3>
+        </div>
+        <div id="green" class="col-sm-2">
+            <h3 class="team-header">Greens</h3>
+        </div>
+        <div id="orange" class="col-sm-2">
+            <h3 class="team-header">Oranges</h3>
+        </div>
+        <div id="non-bibs" class="col-sm-2">
+            <h3 class="team-header">Non-Bibs</h3>
+        </div>
+    </div>
+    <div id="loading">
+        <div class="spinner"></div>
+        Recalculating teams...
+    </div>
+</div>
 
 
 <div>

@@ -26,7 +26,7 @@ namespace RestoreFootball.Controllers
             return View();
         }
 
-        public IActionResult GetGameweekPlayers()
+        public IActionResult GetLatestGameweekPlayers()
         {
             return Json(_gameweekService.GetLatestGameweekPlayers());
         }

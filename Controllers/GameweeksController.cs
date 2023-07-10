@@ -267,5 +267,10 @@ namespace RestoreFootball.Controllers
 
             return RedirectToAction(nameof(Edit), new { id = gameweekId });
         }
+
+        public IActionResult GetGameweekPlayers(int gameweekId)
+        {
+            return Json(_gameweekService.GetGameweekPlayers(gameweekId));
+        }
     }
 }

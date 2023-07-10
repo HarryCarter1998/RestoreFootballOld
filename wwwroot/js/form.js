@@ -1,5 +1,5 @@
 ﻿document.addEventListener("DOMContentLoaded", function () {
-    getGameweekPlayers();
+    getLatestGameweekPlayers();
 });
 
 function addNewPlayer() {
@@ -38,9 +38,16 @@ function addExistingPlayer(player) {
     document.getElementById("success-view").style.display = "block";
 }
 
-function getGameweekPlayers() {
+function getLatestGameweekPlayers() {
     $.ajax({
-        url: '../Home/GetGameweekPlayers',
+        url: '../Home/GetLatestGameweekPlayers',
+        success: function (players) { displayTeams(players) }
+    });
+}
+
+function getGameweekPlayers(gameweekId) {
+    $.ajax({
+        url: '../Gameweeks/GetGameweekPlayers',
         success: function (players) { displayTeams(players) }
     });
 }

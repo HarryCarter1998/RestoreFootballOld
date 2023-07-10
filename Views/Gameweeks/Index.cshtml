@@ -2,12 +2,13 @@
 
 @{
     ViewData["Title"] = "Index";
+    var mostRecentGameweek = Model.OrderByDescending(gw => gw.Date).FirstOrDefault();
 }
+
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+<link href="~/css/gameweeks.css" rel="stylesheet" />
 
-<h1>Index</h1>
-
-<a class="create-new" asp-action="Create">Create New</a>
+<h1>Gameweeks</h1>
 
 <table id="gameweek-table" class="table">
     <thead class="primary">
@@ -27,34 +28,28 @@
             <th>
                 Orange
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Convert.ToString(string.Format("{0:dd/MM/yy}", item.Date))
-            </td>
-            <td>
-                @(item.GreenScore == null ? "TBD" : item.GreenScore)
-            </td>
-            <td>
-                @(item.NonBibsScore == null ? "TBD" : item.NonBibsScore)
-            </td>
-            <td>
-                @(item.YellowScore == null ? "TBD" : item.YellowScore)
-            </td>
-            <td>
-                @(item.OrangeScore == null ? "TBD" : item.OrangeScore)
-            </td>
-
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id"><i class="actionIcon fas fa-edit"></i></a> |
-                <a asp-action="Details" asp-route-id="@item.Id"><i class="actionIcon fas fa-info-circle"></i></a>
-                @*<a asp-action="Delete" asp-route-id="@item.Id"><i class="actionIcon fas fa-trash-alt"></i></a>*@
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr onclick="location.href='@Url.Action("Edit", "Gameweeks", new { id = item.Id })'">
+                <td>
+                    @Convert.ToString(string.Format("{0:dd/MM/yy}", item.Date))
+                </td>
+                <td>
+                    @(item.GreenScore == null && item == mostRecentGameweek ? "TBD" : item.GreenScore)
+                </td>
+                <td>
+                    @(item.NonBibsScore == null && item == mostRecentGameweek ? "TBD" : item.NonBibsScore)
+                </td>
+                <td>
+                    @(item.YellowScore == null && item == mostRecentGameweek ? "TBD" : item.YellowScore)
+                </td>
+                <td>
+                    @(item.OrangeScore == null && item == mostRecentGameweek ? "TBD" : item.OrangeScore)
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

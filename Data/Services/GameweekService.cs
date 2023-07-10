@@ -259,5 +259,10 @@ namespace RestoreFootball.Data.Services
 
             return true;
         }
+
+        public ICollection<GameweekPlayer> GetGameweekPlayers(int gameweekId)
+        {
+            return _context.GameweekPlayer.Include(gp => gp.Player).Where(gp => gp.Gameweek.Id == gameweekId).ToList();
+        }
     }
 }
