@@ -13,9 +13,6 @@
             <th id="name-label">
                 Name
             </th>
-            <th id="rating-label">
-                Rating
-            </th>
             <th id="actions-label"></th>
         </tr>
     </thead>
@@ -26,11 +23,7 @@
                     @item.FirstName @item.LastName
                 </td>
                 <td>
-                    £@(new Random().Next(2,9)) to unlock
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="actionIcon fas fa-edit"></i></a> |
-                    <a asp-action="Details" asp-route-id="@item.Id"><i class="actionIcon fas fa-info-circle"></i></a>
+                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="actionIcon fas fa-edit"></i></a>
                 </td>
             </tr>
     }

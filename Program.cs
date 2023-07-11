@@ -4,7 +4,7 @@ using RestoreFootball.Data.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<RestoreFootballContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("SMARTERASP_CONNECTIONSTRING") ?? throw new InvalidOperationException("Connection string 'AZURE_SQL_CONNECTIONSTRING' not found.")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DATABASE_CONNECTIONSTRING") ?? throw new InvalidOperationException("Connection string 'DATABASE_CONNECTIONSTRING' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

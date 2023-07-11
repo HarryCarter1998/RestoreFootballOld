@@ -200,7 +200,7 @@ namespace RestoreFootball.Data.Services
                 if (diff < bestDiff)
                 {
                     bestDiff = diff;
-                    bestTeamsAndRatings = teamsAndRatings.ToArray();
+                    bestTeamsAndRatings = CopyTeamsAndRatings(teamsAndRatings);
                     bestTeamRatings = teamRatings;
                 }
 
@@ -217,6 +217,18 @@ namespace RestoreFootball.Data.Services
                     Debug.WriteLine($"Team {((Team)i)}: {bestTeamRatings[i]} with no handicap");
                 }
 
+            return bestTeamsAndRatings;
+        }
+
+        private PlayerInfo[] CopyTeamsAndRatings(PlayerInfo[] teamsAndRatings)
+        {
+            var bestTeamsAndRatings = new PlayerInfo[teamsAndRatings.Count()];
+            for (int i = 0; i < teamsAndRatings.Count(); i++)
+            {
+                bestTeamsAndRatings[i] = new PlayerInfo();
+                bestTeamsAndRatings[i].Team = teamsAndRatings[i].Team;
+                bestTeamsAndRatings[i].Rating = teamsAndRatings[i].Rating;
+            }
             return bestTeamsAndRatings;
         }
 
