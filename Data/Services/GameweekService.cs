@@ -118,7 +118,9 @@ namespace RestoreFootball.Data.Services
 
         public async Task<IEnumerable<GameweekPlayer>> RecalculateTeams()
         {
-            var gameweekPlayers = GetLatestGameweekPlayers();
+            var gameweekPlayers = GetLatestGameweekPlayers();            
+
+            if(AssigningFirstPlayer(gameweekPlayers)) return gameweekPlayers;
 
             _groupings = GetLatestGameweek().Result.Groupings;
 
@@ -140,6 +142,16 @@ namespace RestoreFootball.Data.Services
             await AssignTeams(gameweekPlayers, bestTeamsAndRatings);
 
             return gameweekPlayers;
+        }
+
+        private bool AssigningFirstPlayer(IEnumerable<GameweekPlayer> gameweekPlayers)
+        {
+            if (gameweekPlayers.Count() == 1)
+            {
+                gameweekPlayers.First().Team = Team.Green;
+                return true;
+            }
+            return false;
         }
 
         private PlayerInfo[] CreateTeamsAndRatings(ICollection<PlayerInfo> players)
@@ -167,7 +179,7 @@ namespace RestoreFootball.Data.Services
 
             double bestDiff = 99;
             var bestTeamsAndRatings = new PlayerInfo[playerCount];
-            var maxTries = Math.Pow(playerCount / 2, 3);
+            var maxTries = playerCount < 6 ? 27 : Math.Pow((playerCount / 2), 3);
             int[] bestTeamRatings = new int[numTeams];
 
             for (int i = 0; i < maxTries; i++)
@@ -180,7 +192,7 @@ namespace RestoreFootball.Data.Services
                     .Select(g => g.Sum(t => t.Rating))
                     .ToArray();
 
-                if(numTeamsWithExtraPlayer > 0)
+                if(numTeamsWithExtraPlayer > 0 && minPlayersPerTeam > 3)
                     teamRatings = AdjustHandicap(teamRatings, numPlayersInEachTeam, handicap);
 
                 var diff = (teamRatings.Max() - teamRatings.Min()) / teamRatings.Average();

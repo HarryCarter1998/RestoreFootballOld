@@ -60,7 +60,7 @@ td, th {
 }
 
 #rating-label {
-    width: 100px;
+    width: 200px;
 }
 
 #actions-label {
@@ -126,7 +126,9 @@ tbody > tr:hover {
 
 .text {
     color: darkgray;
-    font-size: 18px;
+    font-size: 16px;
+    margin-right: 5px;
+    margin-left: 5px;
 }
 
 .col-sm-2 {
