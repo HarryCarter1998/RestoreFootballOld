@@ -5,3 +5,63 @@
 #edit-content {
     color: white
 }
+
+.grouping {
+    width: 350px;
+}
+
+.groupingSearch {
+    margin: 0px;
+}
+
+.groupedPlayer {
+    color: white;
+    font-size: 20px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.groupedPlayer:hover {
+    cursor: pointer;
+}
+
+.add-grouping {
+    background-color: green;
+    border: none;
+    color: white;
+    padding: 10px 20px 10px 20px;
+    text-decoration: none;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+    display: block;
+    width: 200px;
+    text-align: center;
+    margin: auto;
+}
+
+
+.add-grouping:hover {
+    background-color: forestgreen;
+}
+
+.delete-grouping {
+    background-color: darkred;
+    border: none;
+    color: white;
+    padding: 10px 20px 10px 20px;
+    text-decoration: none;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+    margin: auto; /* Add this line to center the button */
+    display: block; /* Make it a block element to be centered */
+    text-align: center;
+}
+
+
+    .delete-grouping:hover {
+        background-color: #9f0000;
+    }

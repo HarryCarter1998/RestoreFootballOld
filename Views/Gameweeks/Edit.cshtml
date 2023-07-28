@@ -11,6 +11,7 @@
 <script src="~/js/teams.js"></script>
 <link href="~/css/gameweeks.css" rel="stylesheet" />
 <link href="~/css/teams.css" rel="stylesheet" />
+<link href="~/css/site.css" rel="stylesheet" />
 
 <h1>Edit</h1>
 
@@ -34,28 +35,27 @@
     <div id="groupings">
         @foreach (var grouping in Model.Groupings)
         {
-            <div class="dropdown">
-                <input type="text" placeholder="Enter player name..." class="playerSearch" id="playerSearch-@grouping.Id" onkeyup="filterFunction(this.id, 'dropdown-content-@grouping.Id')">
-                <p onclick="location.href='@Url.Action("DeleteGrouping", "Gameweeks", new { groupingId = grouping.Id, gameweekId = Model.Id })'">Delete Grouping</p>
-                <div id="dropdown-content-@grouping.Id" class="dropdown-content">
-                    @{
-                        @foreach (var gameweekPlayer in ViewBag.UngroupedGameweekPlayers)
-                        {
-                            <p class="dropdown-element" onclick="location.href='@Url.Action("AddToGrouping", "Gameweeks", new { groupingId = grouping.Id, gameweekPlayerId = gameweekPlayer.GameweekPlayer.Id, gameweekId = Model.Id })'">@gameweekPlayer.Player.FirstName @gameweekPlayer.Player.LastName</p>
+            <div class="grouping bordered-container">                
+                <div class="dropdown">                
+                    <input type="text" placeholder="Enter player name..." class="playerSearch groupingSearch" id="playerSearch-@grouping.Id" onkeyup="filterFunction(this.id, 'dropdown-content-@grouping.Id')">
+                    <div id="dropdown-content-@grouping.Id" class="dropdown-content">
+                        @{
+                            @foreach (var gameweekPlayer in ViewBag.UngroupedGameweekPlayers)
+                            {
+                                <p class="dropdown-element" onclick="location.href='@Url.Action("AddToGrouping", "Gameweeks", new { groupingId = grouping.Id, gameweekPlayerId = gameweekPlayer.GameweekPlayer.Id, gameweekId = Model.Id })'">@gameweekPlayer.Player.FirstName @gameweekPlayer.Player.LastName</p>
+                            }
                         }
-
-                    }
+                    </div>
                 </div>
-            </div>
-            <div class="grouping bordered-container">
                 @foreach(var gameweekPlayer in grouping.GameweekPlayers)
                 {
                     <p class="groupedPlayer" onclick="location.href='@Url.Action("RemoveFromGrouping", "Gameweeks", new { groupingId = grouping.Id, gameweekPlayerId = gameweekPlayer.Id, gameweekId = Model.Id })'">@gameweekPlayer.Player.FirstName @gameweekPlayer.Player.LastName</p>
                 }
+                <span class="delete-grouping" onclick="location.href='@Url.Action("DeleteGrouping", "Gameweeks", new { groupingId = grouping.Id, gameweekId = Model.Id })'">Delete Grouping</span>
             </div>
         }
-        <p onclick="location.href='@Url.Action("CreateGrouping", "Gameweeks", new { gameweekId = Model.Id })'">Add Grouping</p>
-    </div>
+            <span class="add-grouping" onclick="location.href='@Url.Action("CreateGrouping", "Gameweeks", new { gameweekId = Model.Id })'">Add Grouping</span>
+        </div>
 </form>
 
 <div class="bordered-container">

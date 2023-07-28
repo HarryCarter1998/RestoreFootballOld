@@ -9,10 +9,12 @@ namespace RestoreFootball.Data.Services
     {
         private readonly RestoreFootballContext _context;
         private ICollection<Grouping> _groupings = new List<Grouping>();
+        private readonly IConfiguration _configuration;
 
-        public GameweekService(RestoreFootballContext context)
+        public GameweekService(RestoreFootballContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -85,17 +87,19 @@ namespace RestoreFootball.Data.Services
                     (gameweek.OrangeScore, Team.Orange)
                 }.Where(x => x.score.HasValue).OrderBy(x => x.score).First().team;
 
+            var ratingInterval = _configuration.GetValue<int>("RatingInterval");
+
             gameweek.GameweekPlayers
                 .Where(gp => gp.Team == highestScoringTeam)
                 .Select(gp => gp.Player)
                 .ToList()
-                .ForEach(p => p.Rating++);
+                .ForEach(p => p.Rating += ratingInterval);
 
             gameweek.GameweekPlayers
                 .Where(gp => gp.Team == lowestScoringTeam)
                 .Select(gp => gp.Player)
                 .ToList()
-                .ForEach(p => p.Rating--);
+                .ForEach(p => p.Rating -= ratingInterval);
         }
 
         public ICollection<GameweekPlayer> GetUngroupedGameweekPlayers(int id)
