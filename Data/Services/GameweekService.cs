@@ -36,9 +36,12 @@ namespace RestoreFootball.Data.Services
 
         public async Task CreateNextGameweek()
         {
-            _context.Update(new Gameweek());
+            var latestGameweek = await GetLatestGameweek();
+            var newGameweek = new Gameweek { Date = latestGameweek.Date.AddDays(7) };
+            _context.Update(newGameweek);
             await _context.SaveChangesAsync();
         }
+
 
         public async Task Edit(Gameweek gameweek)
         {

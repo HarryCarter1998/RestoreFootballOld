@@ -13,36 +13,41 @@
 <link href="~/css/teams.css" rel="stylesheet" />
 <link href="~/css/site.css" rel="stylesheet" />
 
-<h1>Edit</h1>
-
 <h4>Gameweek</h4>
 <hr />
+
 <form class="bordered-container" id="edit-content">
-    <label for="GreenScore">Green Score:</label>
-    <p type="number" id="GreenScore" name="GreenScore"><br><br>
+    <div class="score-line">
+        <label for="GreenScore">Green Score:</label>
+        <span>@Model.GreenScore</span>
+    </div>
 
-    <label for="NonBibsScore">NonBibs Score:</label>
-    <p type="number" id="NonBibsScore" name="NonBibsScore"><br><br>
+    <div class="score-line">
+        <label for="NonBibsScore">NonBibs Score:</label>
+        <span>@Model.NonBibsScore</span>
+    </div>
 
-    <label for="YellowScore">Yellow Score:</label>
-    <p type="number" id="YellowScore" name="YellowScore"><br><br>
+    <div class="score-line">
+        <label for="YellowScore">Yellow Score:</label>
+        <span>@Model.YellowScore</span>
+    </div>
 
-    <label for="OrangeScore">Orange Score:</label>
-    <p type="number" id="OrangeScore" name="OrangeScore"><br><br>
-
-    <label for="dropdown">Groupings:</label>
+    <div class="score-line">
+        <label for="OrangeScore">Orange Score:</label>
+        <span>@Model.OrangeScore</span>
+    </div>
 
     <div id="groupings">
         @foreach (var grouping in Model.Groupings)
         {
-            <div class="grouping bordered-container">                
-                <div class="dropdown">                
-                    <input type="text" placeholder="Enter player name..." class="playerSearch groupingSearch" id="playerSearch-@grouping.Id" onkeyup="filterFunction(this.id, 'dropdown-content-@grouping.Id')">
+            <div class="grouping bordered-container">
+                <input type="text" placeholder="Enter player name..." class="groupingSearch" id="playerSearch-@grouping.Id" onkeyup="filterFunction(this.id, 'dropdown-content-@grouping.Id')">
+                <div class="dropdown">
                     <div id="dropdown-content-@grouping.Id" class="dropdown-content">
                         @{
                             @foreach (var gameweekPlayer in ViewBag.UngroupedGameweekPlayers)
                             {
-                                <p class="dropdown-element" onclick="location.href='@Url.Action("AddToGrouping", "Gameweeks", new { groupingId = grouping.Id, gameweekPlayerId = gameweekPlayer.GameweekPlayer.Id, gameweekId = Model.Id })'">@gameweekPlayer.Player.FirstName @gameweekPlayer.Player.LastName</p>
+                                <p onclick="location.href='@Url.Action("AddToGrouping", "Gameweeks", new { groupingId = grouping.Id, gameweekPlayerId = gameweekPlayer.GameweekPlayer.Id, gameweekId = Model.Id })'">@gameweekPlayer.Player.FirstName @gameweekPlayer.Player.LastName</p>
                             }
                         }
                     </div>

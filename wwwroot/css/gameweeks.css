@@ -11,7 +11,23 @@
 }
 
 .groupingSearch {
-    margin: 0px;
+    background-image: url('searchicon.png');
+    background-position: 14px 12px;
+    background-repeat: no-repeat;
+    font-size: 24px;
+    padding: 10px 20px 10px 55px;
+    border: none;
+    border-radius: 15px;
+    border-bottom: 1px solid #002208;
+    background-color: #00482F;
+    width: inherit;
+    color: white;
+}
+
+@media only screen and (max-width: 400px) {
+    .groupingSearch {
+        max-width: 300px;
+    }
 }
 
 .groupedPlayer {
@@ -56,8 +72,8 @@
     cursor: pointer;
     border-radius: 4px;
     font-weight: bold;
-    margin: auto; /* Add this line to center the button */
-    display: block; /* Make it a block element to be centered */
+    margin: auto; 
+    display: block;
     text-align: center;
 }
 
@@ -65,3 +81,11 @@
     .delete-grouping:hover {
         background-color: #9f0000;
     }
+
+.score-line {
+    font-size: 18px;
+    color: white;
+    font-weight: bold;
+    margin-right: 10px;
+    text-align: center;
+}

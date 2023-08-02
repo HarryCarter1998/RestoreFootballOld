@@ -145,11 +145,11 @@ tbody > tr:hover {
     max-width: 800px;
 }
 
-/*@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 400px) {
     .bordered-container {
-        flex: 1;
+        max-width: 300px;
     }
-}*/
+}
 
 .container-header-seperator{
     border-bottom: 3px solid #00482F;
