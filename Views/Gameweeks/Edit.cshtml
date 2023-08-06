@@ -40,8 +40,8 @@
     <div id="groupings">
         @foreach (var grouping in Model.Groupings)
         {
-            <div class="grouping bordered-container">
-                <input type="text" placeholder="Enter player name..." class="groupingSearch" id="playerSearch-@grouping.Id" onkeyup="filterFunction(this.id, 'dropdown-content-@grouping.Id')">
+            <div class="bordered-container" style="max-width: 350px;">
+                <input type="text" placeholder="Enter player name..." class="groupingSearch2" id="playerSearch-@grouping.Id" onkeyup="filterFunction(this.id, 'dropdown-content-@grouping.Id')">
                 <div class="dropdown">
                     <div id="dropdown-content-@grouping.Id" class="dropdown-content">
                         @{

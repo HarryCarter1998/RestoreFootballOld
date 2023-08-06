@@ -43,12 +43,12 @@
     border-bottom: 1px solid #002208;
     background-color: #00482F;
     border-radius: 15px;
-    margin-right: 10px;
-    margin-left: 10px;
     color: white;
+    width: 100%;
+    max-width: 300px;
 }
 
-@media only screen and (max-width: 400px) {
+/*@media only screen and (max-width: 400px) {
     .playerSearch {
         max-width: 300px;
     }
@@ -58,7 +58,7 @@
     .playerSearch {
         max-width: 250px;
     }
-}
+}*/
 
 
 /* The search field when it gets focus/clicked on */
