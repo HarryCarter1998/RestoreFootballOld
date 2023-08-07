@@ -47,7 +47,7 @@
                         @{
                             @foreach (var gameweekPlayer in ViewBag.UngroupedGameweekPlayers)
                             {
-                                <p onclick="location.href='@Url.Action("AddToGrouping", "Gameweeks", new { groupingId = grouping.Id, gameweekPlayerId = gameweekPlayer.GameweekPlayer.Id, gameweekId = Model.Id })'">@gameweekPlayer.Player.FirstName @gameweekPlayer.Player.LastName</p>
+                                <p class="dropdown-element" onclick="location.href='@Url.Action("AddToGrouping", "Gameweeks", new { groupingId = grouping.Id, gameweekPlayerId = gameweekPlayer.GameweekPlayer.Id, gameweekId = Model.Id })'">@gameweekPlayer.Player.FirstName @gameweekPlayer.Player.LastName</p>
                             }
                         }
                     </div>
