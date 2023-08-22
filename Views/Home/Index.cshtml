@@ -2,6 +2,7 @@
 @model RestoreFootball.Models.Player
 @{
     ViewData["Title"] = "Home page";
+    var showResultsButton = ViewBag.ShowResultsButton;
 }
 <link href="~/css/site.css" rel="stylesheet" />
 <link href="~/css/dropdown.css" rel="stylesheet" />
@@ -61,9 +62,9 @@
             <div class="spinner"></div>
             Recalculating teams...
         </div>
-<button id="enter-results" type="button" onclick="displayScores()" class="button" data-toggle="modal" data-target="#ResultsModal">
-    Enter Results
-</button>
+        <button type="button" onclick="displayScores()" class="button" data-toggle="modal" data-target="#ResultsModal" style=display:@(showResultsButton ? "" : "none");>
+            Enter Results
+        </button>
     </div>
     @await Html.PartialAsync("ResultsModalPartial")
 </div>
