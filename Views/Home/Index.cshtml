@@ -61,9 +61,9 @@
             <div class="spinner"></div>
             Recalculating teams...
         </div>
-        <button type="button" onclick="displayScores()" class="button" data-toggle="modal" data-target="#ResultsModal">
-            Enter Results
-        </button>
+<button id="enter-results" type="button" onclick="displayScores()" class="button" data-toggle="modal" data-target="#ResultsModal">
+    Enter Results
+</button>
     </div>
     @await Html.PartialAsync("ResultsModalPartial")
 </div>
