@@ -178,11 +178,13 @@ namespace RestoreFootball.Data.Services
         private PlayerInfo[] FindBestTeamsAndRatings(int playerCount, PlayerInfo[] teamsAndRatings)
         {
             var numPlayersInEachTeam = teamsAndRatings.OrderBy(t => t.Team).GroupBy(t => t.Team).Select(g => g.Count()).ToArray();
-            int numTeams = numPlayersInEachTeam.Count();
+            int numTeams = numPlayersInEachTeam.Length;
             int minPlayersPerTeam = numPlayersInEachTeam.Min();
-            int numTeamsWithExtraPlayer = teamsAndRatings.Count() % numTeams;
-            int handicap = -50 + 10*(minPlayersPerTeam - 4) + 5*(3 - numTeamsWithExtraPlayer);
-            handicap = -100;
+            bool unevenTeams = (teamsAndRatings.Length % numTeams) > 0;
+            int handicap = 0;
+            if (unevenTeams && (minPlayersPerTeam is >= 4 and <= 8)) { 
+                handicap = 400 - 75 * (minPlayersPerTeam - 4);
+            }
 
             double bestDiff = 99;
             var bestTeamsAndRatings = new PlayerInfo[playerCount];
@@ -199,7 +201,7 @@ namespace RestoreFootball.Data.Services
                     .Select(g => g.Sum(t => t.Rating))
                     .ToArray();
 
-                if(numTeamsWithExtraPlayer > 0 && minPlayersPerTeam > 3)
+                if (handicap > 0)
                     teamRatings = AdjustHandicap(teamRatings, numPlayersInEachTeam, handicap);
 
                 var diff = (teamRatings.Max() - teamRatings.Min()) / teamRatings.Average();
@@ -215,7 +217,7 @@ namespace RestoreFootball.Data.Services
             }
 
             for (int i = 0; i < numTeams; i++)
-                if (numPlayersInEachTeam[i] == minPlayersPerTeam && numTeamsWithExtraPlayer > 0)
+                if (numPlayersInEachTeam[i] > minPlayersPerTeam && handicap > 0)
                 {
                     Debug.WriteLine($"Team {((Team)i)}: {bestTeamRatings[i] - handicap} with handicap {handicap} = {bestTeamRatings[i]}");
                 }
@@ -242,7 +244,7 @@ namespace RestoreFootball.Data.Services
         private static int[] AdjustHandicap(int[] teamRatings, int[] numPlayersInEachTeam, int handicap)
         {
             for(int i = 0; i < numPlayersInEachTeam.Count(); i++)
-                if (numPlayersInEachTeam[i] == numPlayersInEachTeam.Min())
+                if (numPlayersInEachTeam[i] > numPlayersInEachTeam.Min())
                     teamRatings[i] += handicap;
 
             return teamRatings;
