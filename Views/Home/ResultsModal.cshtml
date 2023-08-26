@@ -7,18 +7,18 @@
 <h2>@ViewData["Title"]</h2>
 
 <form asp-action="Edit" asp-controller="Gameweeks" method="post">
-    <div class="score">
-        <label id="bibs-label">Bibs</label>
-        <div>
-            <input asp-for="GreenScore" class="form-control" type="number" max="9" min="0"/>
-            <span asp-validation-for="GreenScore" class="text-danger"></span>
-        </div>
-    </div>
     <div id="yellow-score" class="hide score">
         <label>Yellow</label>
         <div>
             <input asp-for="YellowScore" class="form-control" type="number" max="9" min="0" />
             <span asp-validation-for="YellowScore" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="score">
+        <label id="bibs-label">Bibs</label>
+        <div>
+            <input asp-for="GreenScore" class="form-control" type="number" max="9" min="0"/>
+            <span asp-validation-for="GreenScore" class="text-danger"></span>
         </div>
     </div>
     <div id="orange-score" class="hide score">

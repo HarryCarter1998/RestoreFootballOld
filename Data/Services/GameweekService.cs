@@ -54,7 +54,7 @@ namespace RestoreFootball.Data.Services
 
             _context.Update(dbGameweek);
 
-            //AdjustPlayerRatings(dbGameweek);
+            AdjustPlayerRatings(dbGameweek);
 
             await _context.SaveChangesAsync();
 
@@ -74,35 +74,49 @@ namespace RestoreFootball.Data.Services
 
         private void AdjustPlayerRatings(Gameweek gameweek)
         {
-            var highestScoringTeam = new List<(int? score, Team team)>
-                {
-                    (gameweek.GreenScore, Team.Green),
-                    (gameweek.NonBibsScore, Team.NonBibs),
-                    (gameweek.YellowScore, Team.Yellow),
-                    (gameweek.OrangeScore, Team.Orange)
-                }.Where(x => x.score.HasValue).OrderByDescending(x => x.score).First().team;
 
-            var lowestScoringTeam = new List<(int? score, Team team)>
-                {
-                    (gameweek.GreenScore, Team.Green),
-                    (gameweek.NonBibsScore, Team.NonBibs),
-                    (gameweek.YellowScore, Team.Yellow),
-                    (gameweek.OrangeScore, Team.Orange)
-                }.Where(x => x.score.HasValue).OrderBy(x => x.score).First().team;
+            var scores = new List<int?>
+            {
+                gameweek.GreenScore,
+                gameweek.NonBibsScore,
+                gameweek.YellowScore,
+                gameweek.OrangeScore
+            };
+
+            var results = new List<(int? score, Team team)>
+            {
+                (gameweek.GreenScore, Team.Green),
+                (gameweek.NonBibsScore, Team.NonBibs),
+                (gameweek.YellowScore, Team.Yellow),
+                (gameweek.OrangeScore, Team.Orange)
+            };
+
+            var highestScoringTeams = results.Where(x => x.score == scores.Max()).Select(x => x.team);
+
+            var lowestScoringTeams = results.Where(x => x.score == scores.Min()).Select(x => x.team);
 
             var ratingInterval = _configuration.GetValue<int>("RatingInterval");
 
-            gameweek.GameweekPlayers
-                .Where(gp => gp.Team == highestScoringTeam)
-                .Select(gp => gp.Player)
-                .ToList()
-                .ForEach(p => p.Rating += ratingInterval);
+            if (highestScoringTeams.Count() == 1)
+            {
+                Team highestScoringTeam = highestScoringTeams.First();
 
-            gameweek.GameweekPlayers
-                .Where(gp => gp.Team == lowestScoringTeam)
-                .Select(gp => gp.Player)
-                .ToList()
-                .ForEach(p => p.Rating -= ratingInterval);
+                gameweek.GameweekPlayers
+                    .Where(gp => gp.Team == highestScoringTeam)
+                    .Select(gp => gp.Player)
+                    .ToList()
+                    .ForEach(p => p.Rating += ratingInterval);
+            }
+            if (lowestScoringTeams.Count() == 1)
+            {
+                var lowestScoringTeam = lowestScoringTeams.First();
+
+                gameweek.GameweekPlayers
+                    .Where(gp => gp.Team == lowestScoringTeam)
+                    .Select(gp => gp.Player)
+                    .ToList()
+                    .ForEach(p => p.Rating -= ratingInterval);
+            }
         }
 
         public ICollection<GameweekPlayer> GetUngroupedGameweekPlayers(int id)
