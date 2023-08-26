@@ -182,8 +182,9 @@ namespace RestoreFootball.Data.Services
             int minPlayersPerTeam = numPlayersInEachTeam.Min();
             bool unevenTeams = (teamsAndRatings.Length % numTeams) > 0;
             int handicap = 0;
-            if (unevenTeams && (minPlayersPerTeam is >= 4 and <= 8)) { 
-                handicap = 400 - 75 * (minPlayersPerTeam - 4);
+            if (unevenTeams && (minPlayersPerTeam is >= 4 and <= 9)) {
+                var defaultHandicap = _configuration.GetValue<int>("DefaultHandicap");
+                handicap = defaultHandicap - 75 * (minPlayersPerTeam - 4);
             }
 
             double bestDiff = 99;
