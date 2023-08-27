@@ -18,16 +18,14 @@
         <h1 class="display-5">Sign Up</h1>
         <div id="add-existing">
             <p class="text">Enter your name below to sign up for Wednesday</p>
-            <div class="dropdown">
-                <input type="text" placeholder="Enter your name..." class="playerSearch" id="playerSearch" onkeyup="filterFunction()">
-                <div id="dropdown-content" class="dropdown-content">
-                    @{
-                        foreach (var player in ViewBag.RemainingPlayers)
-                        {
-                            <p class="dropdown-element" value=@player.Id onclick="addExistingPlayer(this)">@player.FirstName @player.LastName</p>
-                        }
+            <input type="text" placeholder="Enter your name..." class="playerSearch" id="playerSearch" onkeyup="filterFunction()">
+            <div id="dropdown-content" class="dropdown-content">
+                @{
+                    foreach (var player in ViewBag.RemainingPlayers)
+                    {
+                        <p class="dropdown-element" value=@player.Id onclick="addExistingPlayer(this)">@player.FirstName @player.LastName</p>
                     }
-                </div>
+                }
             </div>
             <p class="subtleLink" onclick="switchForm()">Can't see your name? </p>
         </div>

@@ -48,19 +48,6 @@
     max-width: 300px;
 }
 
-/*@media only screen and (max-width: 400px) {
-    .playerSearch {
-        max-width: 300px;
-    }
-}
-
-@media only screen and (max-width: 350px) {
-    .playerSearch {
-        max-width: 250px;
-    }
-}*/
-
-
 /* The search field when it gets focus/clicked on */
 .playerSearch:focus {
     outline: 2px solid #00340c;

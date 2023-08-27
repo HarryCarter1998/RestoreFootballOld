@@ -6,22 +6,10 @@
     border-radius: 10px;
     margin-top: 5px;
     position: absolute;
-    width: 250px;
-    margin-left: 60px;
-}
-
-@media only screen and (max-width: 500px) {
-    .dropdown-content {
-        width: 200px;
-        margin-left: 60px;
-    }
-}
-
-@media only screen and (max-width: 350px) {
-    .dropdown-content {
-        width: 200px;
-        margin-left: 30px;
-    }
+    width: 100%;
+    max-width: 250px;
+    left: 50%; /* To horizontally center the div */
+    transform: translateX(-50%); /* To fine-tune the centering */
 }
 
     /* Elements inside the dropdown */
