@@ -54,11 +54,48 @@ namespace RestoreFootball.Data.Services
 
             _context.Update(dbGameweek);
 
-            AdjustPlayerRatings(dbGameweek);
+            var results = new List<(int? score, Team team)>
+            {
+                (gameweek.GreenScore, Team.Green),
+                (gameweek.NonBibsScore, Team.NonBibs),
+                (gameweek.YellowScore, Team.Yellow),
+                (gameweek.OrangeScore, Team.Orange)
+            };
+
+            AdjustPlayerRatings(dbGameweek, results);
+            AdjustWinStreaks(dbGameweek, results);
 
             await _context.SaveChangesAsync();
 
             await CreateNextGameweek();
+        }
+
+        private void AdjustWinStreaks(Gameweek gameweek, List<(int? score, Team team)> results)
+        {
+            var highestScoringTeams = results.Where(x => x.score == results.Max(r => r.score)).Select(x => x.team);
+            if (highestScoringTeams.Count() > 1)
+            {
+                gameweek.GameweekPlayers
+                    .Select(gp => gp.Player)
+                    .ToList()
+                    .ForEach(p => p.WinStreak = 0);
+                return;
+            }
+
+            Team highestScoringTeam = highestScoringTeams.First();
+
+            gameweek.GameweekPlayers
+                .Where(gp => gp.Team == highestScoringTeam)
+                .Select(gp => gp.Player)
+                .ToList()
+                .ForEach(p => p.WinStreak += 1);
+            gameweek.GameweekPlayers
+                .Where(gp => gp.Team != highestScoringTeam)
+                .Select(gp => gp.Player)
+                .ToList()
+                .ForEach(p => p.WinStreak = 0);
+            return;
+
         }
 
         public async Task<Gameweek> GetLatestGameweek()
@@ -72,28 +109,11 @@ namespace RestoreFootball.Data.Services
                 .FirstOrDefaultAsync();
         }
 
-        private void AdjustPlayerRatings(Gameweek gameweek)
+        private void AdjustPlayerRatings(Gameweek gameweek, List<(int? score, Team team)> results)
         {
+            var highestScoringTeams = results.Where(x => x.score == results.Max(r => r.score)).Select(x => x.team);
 
-            var scores = new List<int?>
-            {
-                gameweek.GreenScore,
-                gameweek.NonBibsScore,
-                gameweek.YellowScore,
-                gameweek.OrangeScore
-            };
-
-            var results = new List<(int? score, Team team)>
-            {
-                (gameweek.GreenScore, Team.Green),
-                (gameweek.NonBibsScore, Team.NonBibs),
-                (gameweek.YellowScore, Team.Yellow),
-                (gameweek.OrangeScore, Team.Orange)
-            };
-
-            var highestScoringTeams = results.Where(x => x.score == scores.Max()).Select(x => x.team);
-
-            var lowestScoringTeams = results.Where(x => x.score == scores.Min()).Select(x => x.team);
+            var lowestScoringTeams = results.Where(x => x.score == results.Min(r => r.score)).Select(x => x.team);
 
             var ratingInterval = _configuration.GetValue<int>("RatingInterval");
 
