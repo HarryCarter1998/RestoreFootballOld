@@ -17,11 +17,11 @@ namespace RestoreFootball.Controllers
             _logger = logger;
             _playerService = playerService;
             _gameweekService = gameweekService;
-            //ViewBag.BestLastTenGames = await _gameweekService.GetBestLastTenGames();
         }
 
         public async Task<IActionResult> IndexAsync()
         {
+            ViewBag.BestLastTenGames = await _gameweekService.GetBestLastTenGames();
             return View();
         }
     }
