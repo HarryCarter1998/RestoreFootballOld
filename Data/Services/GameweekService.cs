@@ -111,31 +111,20 @@ namespace RestoreFootball.Data.Services
 
         private void AdjustPlayerRatings(Gameweek gameweek, List<(int? score, Team team)> results)
         {
-            var highestScoringTeams = results.Where(x => x.score == results.Max(r => r.score)).Select(x => x.team);
-
-            var lowestScoringTeams = results.Where(x => x.score == results.Min(r => r.score)).Select(x => x.team);
-
-            var ratingInterval = _configuration.GetValue<int>("RatingInterval");
-
-            if (highestScoringTeams.Count() == 1)
+            foreach (var (score, team) in results)
             {
-                Team highestScoringTeam = highestScoringTeams.First();
+                int ratingChange = 0;
+
+                int numTeams = results.Where(r => r.score != null).Count();
+
+                if (numTeams == 2) ratingChange = score == 3 ? 25 : -25;
+                else ratingChange = (int)Math.Round(100 * ((score ?? 0) / 9.0 - 0.5));
 
                 gameweek.GameweekPlayers
-                    .Where(gp => gp.Team == highestScoringTeam)
+                    .Where(gp => gp.Team == team)
                     .Select(gp => gp.Player)
                     .ToList()
-                    .ForEach(p => p.Rating += ratingInterval);
-            }
-            if (lowestScoringTeams.Count() == 1)
-            {
-                var lowestScoringTeam = lowestScoringTeams.First();
-
-                gameweek.GameweekPlayers
-                    .Where(gp => gp.Team == lowestScoringTeam)
-                    .Select(gp => gp.Player)
-                    .ToList()
-                    .ForEach(p => p.Rating -= ratingInterval);
+                    .ForEach(p => p.Rating += ratingChange);
             }
         }
 

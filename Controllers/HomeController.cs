@@ -25,7 +25,7 @@ namespace RestoreFootball.Controllers
             ViewBag.NumTeams = _gameweekService.GetLatestGameweekPlayers().Count() >= 20 ? 4 : 2;
             var latestGameweek = await _gameweekService.GetLatestGameweek();
             var latestGameweekTime = latestGameweek.Date.AddHours(21).AddMinutes(30);
-            ViewBag.ShowResultsButton = DateTime.Now > latestGameweekTime;
+            ViewBag.ShowResultsButton = /*DateTime.Now > latestGameweekTime;*/ true;
             return View();
         }
 
