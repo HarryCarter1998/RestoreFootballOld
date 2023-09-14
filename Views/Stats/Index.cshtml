@@ -1,0 +1,26 @@
+﻿@using RestoreFootball.Models;
+@model RestoreFootball.Models.Player
+@{
+    ViewData["Title"] = "Stats page";
+}
+<link href="~/css/stats.css" rel="stylesheet" />
+
+<div class="text-center">
+    <div class="bordered-container">
+        <h1 class="display-5">Stats</h1>
+        <div style="display:flex; justify-content: center;">
+            <div class="bordered-container potmContainer">
+                <h1 class="statHeader">Best last 10 games</h1>
+                <div id="firstPlace">Harry</div>
+                <div id="secondPlace">Tom</div>
+                <div id="thirdPlace">Ben</div>
+            </div>
+            <div class="bordered-container potmContainer">
+                <h1 class="statHeader">Winstreaks</h1>
+                <div id="firstPlace">Harry</div>
+                <div id="secondPlace">Tom</div>
+                <div id="thirdPlace">Ben</div>
+            </div>
+        </div>
+    </div>
+</div>

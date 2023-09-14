@@ -1,0 +1,24 @@
+﻿body {
+}
+
+#firstPlace {
+    background-color: #FFD700;
+}
+#secondPlace{
+    background-color: #C0C0C0;
+}
+#thirdPlace{
+    background-color: #cd7f32;
+}
+
+.statHeader {
+    font-weight: bold;
+    color: darkgray;
+    padding: 10px;
+    border-bottom: 3px solid #00482F;
+    font-size: 18px;
+}
+
+.potmContainer {
+    max-width:300px;
+}
