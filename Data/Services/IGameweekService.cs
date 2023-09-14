@@ -17,5 +17,7 @@ namespace RestoreFootball.Data.Services
         public ICollection<GameweekPlayer> GetUngroupedGameweekPlayers(int id);
         
         public ICollection<GameweekPlayer> GetGameweekPlayers(int gameweekId);
+
+        public Task<IEnumerable<(string PlayerName, int score)>> GetBestLastTenGames();
     }
 }

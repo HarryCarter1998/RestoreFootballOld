@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using RestoreFootball.Models;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace RestoreFootball.Data.Services
 {
@@ -320,6 +321,47 @@ namespace RestoreFootball.Data.Services
         public ICollection<GameweekPlayer> GetGameweekPlayers(int gameweekId)
         {
             return _context.GameweekPlayer.Include(gp => gp.Player).Where(gp => gp.Gameweek.Id == gameweekId).ToList();
+        }
+
+        public async Task<IEnumerable<(string PlayerName, int score)>> GetBestLastTenGames()
+        {
+            List<(string PlayerName, int score)> players = new();
+
+            var lastTenGameweeks = await _context.Gameweek
+                .Include(g => g.GameweekPlayers)
+                .Where(g => g.GameweekPlayers.Count() > 0)
+                .OrderByDescending(g => g.Date)
+                .Take(10)
+                .ToListAsync();
+
+            var lastTenGameweeksGameweekPlayers = lastTenGameweeks.SelectMany(g => g.GameweekPlayers).ToList();
+
+            var lastTenGameweeksPlayers = lastTenGameweeksGameweekPlayers.Select(gp => gp.Player).Distinct().ToList();
+            foreach (var player in lastTenGameweeksPlayers)
+            {
+                var totalPoints = 0;
+                foreach (var results in lastTenGameweeks)
+                {
+                    var gameweekPlayer = results?.GameweekPlayers?.FirstOrDefault(gp => gp.Player == player);
+                    if (gameweekPlayer == null) continue;
+
+                    string property = gameweekPlayer.Team switch
+                    {
+                        Team.Green => "GreenScore",
+                        Team.NonBibs => "NonBibsScore",
+                        Team.Yellow => "YellowScore",
+                        Team.Orange => "OrangeScore",
+                        _ => throw new ArgumentException("Invalid team specified: " + gameweekPlayer.Team),
+                    };
+                    var gameweekProperty = results.GetType().GetProperty(property);
+                    var points = gameweekProperty?.GetValue(results) as int? ?? 0;
+                    totalPoints += points;
+                }
+                players.Add(($"{player.FirstName} {player.LastName}", totalPoints));
+            }
+            var leaderboard = players.OrderByDescending(p => p.score).Take(10).ToList();
+
+            return await Task.FromResult(leaderboard);
         }
     }
 }

@@ -26,6 +26,7 @@ namespace RestoreFootball.Controllers
             var latestGameweek = await _gameweekService.GetLatestGameweek();
             var latestGameweekTime = latestGameweek.Date.AddHours(21).AddMinutes(30);
             ViewBag.ShowResultsButton = /*DateTime.Now > latestGameweekTime;*/ true;
+            _gameweekService.GetBestLastTenGames();
             return View();
         }
 
